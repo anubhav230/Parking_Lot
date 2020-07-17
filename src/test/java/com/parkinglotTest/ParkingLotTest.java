@@ -16,9 +16,9 @@ public class ParkingLotTest {
 
     @Test
     public void givenCar_WhenUnParked_ShouldReturnTrueResult() {
-        String car = "car1";
-        int result = parkingLot.park(car);
-        boolean result2 = parkingLot.unPark(car);
+        String carId = "car1";
+        parkingLot.park(carId);
+        boolean result2 = parkingLot.unPark(carId);
         Assert.assertTrue(result2);
     }
 }
