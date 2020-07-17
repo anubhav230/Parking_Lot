@@ -21,4 +21,14 @@ public class ParkingLotTest {
         boolean result2 = parkingLot.unPark(carId);
         Assert.assertTrue(result2);
     }
+
+    @Test
+    public void givenParkingLot_WhenFull_ShouldReturnTrueResult() {
+        String car1 = "car1";
+        String car2 = "car2";
+        String car3 =  "car3";
+        parkingLot.park(car1, car2, car3);
+        boolean result = parkingLot.isFull();
+        Assert.assertTrue(result);
+    }
 }
