@@ -9,4 +9,8 @@ public class ParkingLot {
         parkingLot.add(car);
         return parkingLot.size();
     }
+
+    public boolean unPark(String car) {
+        return false;
+    }
 }
