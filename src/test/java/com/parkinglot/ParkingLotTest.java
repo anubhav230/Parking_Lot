@@ -1,9 +1,12 @@
 package com.parkinglot;
 
+import com.parkinglot.models.ParkingLotOwner;
 import com.parkinglot.models.SecurityStaff;
 import com.parkinglot.services.ParkingLot;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.List;
 
 public class ParkingLotTest {
 
@@ -44,5 +47,18 @@ public class ParkingLotTest {
         boolean result = parkingLot.isFull();
         String result2 = securityStaff.security(result);
         Assert.assertEquals("Redirect Security", result2);
+    }
+
+    @Test
+    public void givenParkingLot_WhenHaveSpace_ShouldPutOpenSign() {
+        ParkingLotOwner parkingLotOwner = new ParkingLotOwner();
+        SecurityStaff securityStaff = new SecurityStaff();
+        String car1 = "car1";
+        String car2 = "car2";
+        String car3 = "car3";
+        parkingLot.park(car1, car2, car3);
+        List result = parkingLot.empty();
+        String result2 = parkingLotOwner.getUpdate(result);
+        Assert.assertEquals("parking lot is open", result2);
     }
 }

@@ -26,4 +26,9 @@ public class ParkingLot {
             return true;
         return false;
     }
+
+    public List empty() {
+        parkingLot.remove(parkingLot.size() - 1);
+        return parkingLot;
+    }
 }
