@@ -1,7 +1,12 @@
 package com.parkinglotTest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ParkingLot {
+    List<String> parkingLot = new ArrayList<>();
     public int park(String car) {
-        return 0;
+        parkingLot.add(car);
+        return parkingLot.size();
     }
 }
