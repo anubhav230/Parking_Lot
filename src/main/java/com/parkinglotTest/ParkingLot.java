@@ -1,10 +1,9 @@
 package com.parkinglotTest;
-
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ParkingLot {
+    int parkingLotSize = 3;
 
     List<String> parkingLot = new ArrayList<>();
 
@@ -23,6 +22,8 @@ public class ParkingLot {
     }
 
     public boolean isFull() {
-            return false;
+        if (parkingLot.size() == parkingLotSize )
+            return true;
+        return false;
     }
 }
