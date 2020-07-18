@@ -4,6 +4,8 @@ import java.util.List;
 
 public class ParkingLotOwner {
     public String getUpdate(List list) {
-       return null;
+        if (list.size() < 3)
+            return "parking lot is open";
+        else return  "parking lot is full";
     }
 }

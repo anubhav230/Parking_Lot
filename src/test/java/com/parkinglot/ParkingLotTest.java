@@ -52,7 +52,6 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLot_WhenHaveSpace_ShouldPutOpenSign() {
         ParkingLotOwner parkingLotOwner = new ParkingLotOwner();
-        SecurityStaff securityStaff = new SecurityStaff();
         String car1 = "car1";
         String car2 = "car2";
         String car3 = "car3";
