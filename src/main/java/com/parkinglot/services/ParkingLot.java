@@ -1,34 +1,43 @@
 package com.parkinglot.services;
+import com.parkinglot.exception.ParkingLotException;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class ParkingLot {
+
     int parkingLotSize = 3;
 
-    List<String> parkingLot = new ArrayList<>();
+    List<String> parkingLotList = new ArrayList<>(2);
+    public void park(String vehicle) throws ParkingLotException {
+        if (parkingLotList.size() >= parkingLotSize)
+             throw new ParkingLotException("Parking Lot is full", ParkingLotException.ExceptionType.PARKING_FULL);
+        if (parkingLotList.contains(vehicle))
+            throw new ParkingLotException("Vehicle is already parked", ParkingLotException.ExceptionType.ALREADY_PARKED);
+        parkingLotList.add(vehicle);
+    }
 
-    public int park(String... car) {
-        for (String a : car){
-            parkingLot.add(a);
-        }
-        return parkingLot.size();
+    public boolean isVehicleParked(String vehicle) {
+        return parkingLotList.contains(vehicle);
     }
 
     public boolean unPark(String car) {
-        if (parkingLot.contains(car)) {
-            parkingLot.remove(car);
+        if (parkingLotList.contains(car)) {
+            parkingLotList.remove(car);
             return true;
         } else return false;
     }
 
     public boolean isFull() {
-        if (parkingLot.size() == parkingLotSize )
+        if (parkingLotList.size() == parkingLotSize )
             return true;
         return false;
     }
 
     public List empty() {
-        parkingLot.remove(parkingLot.size() - 1);
-        return parkingLot;
+        parkingLotList.remove(parkingLotList.size() - 1);
+        return parkingLotList;
     }
 }
