@@ -1,7 +1,11 @@
 package com.parkinglot.models;
 
+import com.parkinglot.services.ParkingLot;
+
 public class SecurityStaff {
-    public boolean security(boolean value) {
-        return value;
+    public String security(ParkingLot parkingLot) {
+        if (parkingLot.isFull())
+            return "redirect security";
+        return "space available for security vehicle";
     }
 }

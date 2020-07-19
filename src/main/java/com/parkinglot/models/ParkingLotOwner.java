@@ -1,11 +1,15 @@
 package com.parkinglot.models;
 
+import com.parkinglot.services.ParkingLot;
+
 import java.util.List;
 
 public class ParkingLotOwner {
-    public String getUpdate(List list) {
-        if (list.size() < 3)
+
+
+    public String getUpdate(ParkingLot parkingLot) {
+        if (!parkingLot.isFull())
             return "parking lot is open";
-        else return  "parking lot is full";
+        return  "parking lot is full";
     }
 }
