@@ -145,7 +145,8 @@ public class ParkingLotTest {
     public void givenVehicle_WhenParked_shouldReturnParkedTime() throws ParkingLotException {
         int result = parkingLot.getSlotNumber();
         parkingLot.park(result, "vehicle1");
-        String result2 = String.valueOf(arrivalTime = LocalTime.now());
-        Assert.assertEquals(result2, parkingLot.arrival);
+        parkingLot.unPark(result);
+        Assert.assertEquals(parkingLot.parkTime, LocalTime.now());
+        Assert.assertEquals(parkingLot.unParkTime, LocalTime.now());
     }
 }

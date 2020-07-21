@@ -10,7 +10,8 @@ import java.util.Map;
 import java.time.LocalTime;
 
 public class ParkingLot {
-    public LocalTime arrivalTime = null;
+    public LocalTime parkTime = null;
+    public LocalTime unParkTime = null;
     int parkingLotSize = 3;
     public String arrival;
 
@@ -36,7 +37,7 @@ public class ParkingLot {
             throw new ParkingLotException("Parking Lot is full", ParkingLotException.ExceptionType.PARKING_FULL);
         }
         parkingLotMap.put(slot, vehicle);
-        this.arrival = String.valueOf(this.arrivalTime = LocalTime.now());
+        parkTime = LocalTime.now();
     }
 
     public boolean isVehicleParked(String vehicle) {
@@ -63,6 +64,7 @@ public class ParkingLot {
     public boolean unPark(int slot) {
         if (parkingLotMap.containsKey(slot)) {
             parkingLotMap.put(slot, " ");
+            unParkTime = LocalTime.now();
             for (ParkingLotObserver observer : observers) {
                 observer.capacityIsAvailable();
             }
