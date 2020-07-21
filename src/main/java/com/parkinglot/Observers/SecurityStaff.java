@@ -1,4 +1,4 @@
-package com.parkinglotTest.Observers;
+package com.parkinglot.Observers;
 
 public class SecurityStaff implements ParkingLotObserver {
     private boolean isFullCapacity;

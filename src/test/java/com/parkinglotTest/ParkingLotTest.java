@@ -1,17 +1,17 @@
 package com.parkinglotTest;
 
-import com.parkinglotTest.Observers.Attendant;
-import com.parkinglotTest.Observers.ParkingLotOwner;
-import com.parkinglotTest.Observers.SecurityStaff;
-import com.parkinglotTest.exception.ParkingLotException;
-import com.parkinglotTest.services.ParkingLot;
+import com.parkinglot.Observers.Attendant;
+import com.parkinglot.Observers.ParkingLotOwner;
+import com.parkinglot.Observers.SecurityStaff;
+import com.parkinglot.exception.ParkingLotException;
+import com.parkinglot.services.ParkingLotSystem;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.time.LocalTime;
 
 public class ParkingLotTest {
-    ParkingLot parkingLot = new ParkingLot(3);
+    ParkingLotSystem parkingLot = new ParkingLotSystem(3);
 
     @Test
     public void givenCarAndUser_WhenPark_ShouldPark() throws ParkingLotException {

@@ -1,7 +1,7 @@
-package com.parkinglotTest.services;
+package com.parkinglot.services;
 
-import com.parkinglotTest.Observers.ParkingLotObserver;
-import com.parkinglotTest.exception.ParkingLotException;
+import com.parkinglot.Observers.ParkingLotObserver;
+import com.parkinglot.exception.ParkingLotException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,15 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.time.LocalTime;
 
-public class ParkingLot {
+public class ParkingLotSystem {
     public LocalTime parkTime = null;
     public LocalTime unParkTime = null;
     int parkingLotSize = 3;
 
     Map<Integer, String> parkingLotMap = new HashMap<>();
-    //Map<Integer, String> parkingLotMap2 = new HashMap<>();
     List<ParkingLotObserver> observers = new ArrayList<>();
-    public ParkingLot(int lotSize) {
+    public ParkingLotSystem(int lotSize) {
         for (int i = 1; i <= lotSize; i++) {
             parkingLotMap.put(i, " ");
         }
@@ -29,12 +28,14 @@ public class ParkingLot {
 
     public void park(int slot, String vehicle) throws ParkingLotException {
         if (parkingLotMap.containsValue(vehicle))
-            throw new ParkingLotException("Vehicle is already parked", ParkingLotException.ExceptionType.ALREADY_PARKED);
+            throw new ParkingLotException("Vehicle is already parked", ParkingLotException.ExceptionType
+                                            .ALREADY_PARKED);
         if (parkingLotMap.size() >= parkingLotSize && !parkingLotMap.containsValue(" ")) {
             for (ParkingLotObserver observer : observers) {
                 observer.capacityIsFull();
             }
-            throw new ParkingLotException("Parking Lot is full", ParkingLotException.ExceptionType.PARKING_FULL);
+            throw new ParkingLotException("Parking Lot is full", ParkingLotException.ExceptionType
+                                            .PARKING_FULL);
         }
             parkingLotMap.put(slot, vehicle);
             parkTime = LocalTime.now();
