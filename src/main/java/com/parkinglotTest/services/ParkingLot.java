@@ -53,6 +53,10 @@ public class ParkingLot {
         return getKey(parkingLotMap, " ");
     }
 
+    public int getVehicleValue(String value) {
+        return getKey(parkingLotMap, value);
+    }
+
     public boolean unPark(int slot) {
         if (parkingLotMap.containsKey(slot)) {
             parkingLotMap.put(slot, " ");

@@ -147,4 +147,14 @@ public class ParkingLotTest {
         boolean result2 = parkingLot.isVehicleParked("vehicle");
         Assert.assertTrue(result2);
     }
+
+    @Test
+    public void givenVehicle_WhenDriverWantToUnPark_ShouldReturnKey() throws ParkingLotException {
+        int result = parkingLot.getSlotNumber();
+        parkingLot.park(result, "vehicle1");
+        int result2 = parkingLot.getVehicleValue("vehicle1");
+        boolean unPark = parkingLot.unPark(result2);
+        Assert.assertTrue(unPark);
+    }
+
 }
