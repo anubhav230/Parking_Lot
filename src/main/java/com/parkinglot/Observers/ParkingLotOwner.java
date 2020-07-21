@@ -1,6 +1,9 @@
 package com.parkinglot.Observers;
 
-public class ParkingLotOwner  implements ParkingLotObserver {
+
+import com.parkinglot.services.ParkingLotSystem;
+
+public class ParkingLotOwner implements ParkingLotObserver {
 
     private boolean isFullCapacity;
 
@@ -16,6 +19,11 @@ public class ParkingLotOwner  implements ParkingLotObserver {
 
     public boolean isCapacityFull() {
         return this.isFullCapacity;
+    }
+
+
+    public int whereToPark(ParkingLotSystem parkingLotSystem) {
+        return parkingLotSystem.getSlotNumber();
     }
 
 }

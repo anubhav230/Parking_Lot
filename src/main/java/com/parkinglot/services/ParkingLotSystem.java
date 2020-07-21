@@ -9,11 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.time.LocalTime;
 
-<<<<<<< HEAD:src/main/java/com/parkinglotTest/services/ParkingLot.java
-public class ParkingLot {
-=======
+
+
 public class ParkingLotSystem {
->>>>>>> UC10_NearestSlot:src/main/java/com/parkinglot/services/ParkingLotSystem.java
     public LocalTime parkTime = null;
     public LocalTime unParkTime = null;
     int parkingLotSize = 3;
@@ -41,15 +39,15 @@ public class ParkingLotSystem {
             throw new ParkingLotException("Parking Lot is full", ParkingLotException.ExceptionType
                                             .PARKING_FULL);
         }
-<<<<<<< HEAD:src/main/java/com/parkinglotTest/services/ParkingLot.java
+
         parkingLotMap.put(slot, vehicle);
         parkTime = LocalTime.now();
-=======
+
             parkingLotMap.put(slot, vehicle);
             parkTime = LocalTime.now();
 
 
->>>>>>> UC10_NearestSlot:src/main/java/com/parkinglot/services/ParkingLotSystem.java
+
     }
 
     public boolean isVehicleParked(String vehicle) {

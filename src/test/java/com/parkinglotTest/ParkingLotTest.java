@@ -149,8 +149,6 @@ public class ParkingLotTest {
         parkingLot.unPark(result);
         Assert.assertEquals(parkingLot.parkTime, LocalTime.now());
         Assert.assertEquals(parkingLot.unParkTime, LocalTime.now());
-<<<<<<< HEAD
-=======
     }
 
     @Test
@@ -160,6 +158,5 @@ public class ParkingLotTest {
         parkingLot.park(slot, "vehicle");
         boolean result = parkingLot.isVehicleParked("vehicle");
         Assert.assertTrue(result);
->>>>>>> UC10_NearestSlot
     }
 }
