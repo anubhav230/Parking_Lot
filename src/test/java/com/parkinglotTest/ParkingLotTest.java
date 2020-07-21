@@ -1,5 +1,6 @@
 package com.parkinglotTest;
 
+import com.parkinglotTest.Observers.Attendant;
 import com.parkinglotTest.exception.ParkingLotException;
 import com.parkinglotTest.Observers.ParkingLotOwner;
 import com.parkinglotTest.Observers.SecurityStaff;
@@ -142,8 +143,9 @@ public class ParkingLotTest {
 
     @Test
     public void givenCarAndUser2_WhenPark_ShouldPark() throws ParkingLotException {
-        int result = parkingLot.getSlotNumber();
-        parkingLot.park(result, "vehicle");
+        Attendant attendant = new Attendant();
+        int slot = attendant.parkingSlot(parkingLot);
+        parkingLot.park(slot, "vehicle");
         boolean result2 = parkingLot.isVehicleParked("vehicle");
         Assert.assertTrue(result2);
     }
