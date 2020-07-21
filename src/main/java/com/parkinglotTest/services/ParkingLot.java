@@ -1,8 +1,11 @@
 package com.parkinglotTest.services;
 
+import com.parkinglotTest.Observers.ParkingLotObserver;
 import com.parkinglotTest.exception.ParkingLotException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ParkingLot {
@@ -10,21 +13,27 @@ public class ParkingLot {
     int parkingLotSize = 3;
 
     Map<Integer, String> parkingLotMap = new HashMap<>();
-
+    List<ParkingLotObserver> observers = new ArrayList<>();
     public ParkingLot(int lotSize) {
         for (int i = 1; i <= lotSize; i++) {
             parkingLotMap.put(i, " ");
         }
     }
 
+    public void register(ParkingLotObserver observer) {
+        this.observers.add(observer);
+    }
+
     public void park(int slot, String vehicle) throws ParkingLotException {
-        if (parkingLotMap.size() >= parkingLotSize && !parkingLotMap.containsValue(" "))
-            throw new ParkingLotException("Parking Lot is full", ParkingLotException.ExceptionType.PARKING_FULL);
         if (parkingLotMap.containsValue(vehicle))
             throw new ParkingLotException("Vehicle is already parked", ParkingLotException.ExceptionType.ALREADY_PARKED);
+        if (parkingLotMap.size() >= parkingLotSize && !parkingLotMap.containsValue(" ")) {
+            for (ParkingLotObserver observer : observers) {
+                observer.capacityIsFull();
+            }
+            throw new ParkingLotException("Parking Lot is full", ParkingLotException.ExceptionType.PARKING_FULL);
+        }
         parkingLotMap.put(slot, vehicle);
-        System.out.println(parkingLotMap);
-
     }
 
     public boolean isVehicleParked(String vehicle) {
@@ -47,12 +56,15 @@ public class ParkingLot {
     public boolean unPark(int slot) {
         if (parkingLotMap.containsKey(slot)) {
             parkingLotMap.put(slot, " ");
-            System.out.println(parkingLotMap);
+            for (ParkingLotObserver observer : observers) {
+                observer.capacityIsAvailable();
+            }
             return true;
-        } else return false;
+        }
+        return false;
     }
 
-    public boolean isFull() {
-        return parkingLotMap.size() >= parkingLotSize && !parkingLotMap.containsValue(" ");
-    }
+//    public boolean isFull() {
+//        return parkingLotMap.size() >= parkingLotSize && !parkingLotMap.containsValue(" ");
+//    }
 }

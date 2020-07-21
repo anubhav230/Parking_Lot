@@ -1,8 +1,8 @@
 package com.parkinglotTest;
 
 import com.parkinglotTest.exception.ParkingLotException;
-import com.parkinglotTest.models.ParkingLotOwner;
-import com.parkinglotTest.models.SecurityStaff;
+import com.parkinglotTest.Observers.ParkingLotOwner;
+import com.parkinglotTest.Observers.SecurityStaff;
 import com.parkinglotTest.services.ParkingLot;
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,14 +34,13 @@ public class ParkingLotTest {
         int slot = parkingLot.getSlotNumber();
         String vehicle = "vehicle1";
         parkingLot.park(slot, vehicle);
-        boolean result2 = parkingLot.unPark(3);
+        boolean result2 = parkingLot.unPark(4);
         Assert.assertFalse(result2);
     }
 
     @Test
     public void givenCarToPark_WhenAlreadyParked_ShouldThrowException() {
         try {
-            //int slot = parkingLot.getSlotNumber();
             String vehicle = "vehicle1";
             parkingLot.park(1, vehicle);
             parkingLot.park(1, vehicle);
@@ -70,50 +69,75 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLot_WhenFull_ShouldRedirectSecurity() throws ParkingLotException {
         SecurityStaff securityStaff = new SecurityStaff();
-        String vehicle1 = "vehicle1";
-        String vehicle2 = "vehicle2";
-        String vehicle3 = "vehicle3";
-        parkingLot.park(1, vehicle1);
-        parkingLot.park(2, vehicle2);
-        parkingLot.park(3, vehicle3);
-        Assert.assertEquals("redirect security", securityStaff.security(parkingLot));
+        parkingLot.register(securityStaff);
+        try {
+            String vehicle1 = "vehicle1";
+            String vehicle2 = "vehicle2";
+            String vehicle3 = "vehicle3";
+            String vehicle4 = "vehicle4";
+            parkingLot.park(1, vehicle1);
+            parkingLot.park(2, vehicle2);
+            parkingLot.park(3, vehicle3);
+            parkingLot.park(4, vehicle4);
+        }catch (ParkingLotException e) {
+            boolean result = securityStaff.isCapacityFull();
+            Assert.assertTrue(result);
+        }
     }
 
     @Test
     public void givenParkingLot_WhenHasSpace_ShouldNotRedirectSecurity() throws ParkingLotException {
         SecurityStaff securityStaff = new SecurityStaff();
-        String vehicle1 = "vehicle1";
-        String vehicle2 = "vehicle2";
-        parkingLot.park(1, vehicle1);
-        parkingLot.park(2, vehicle2);
-        Assert.assertEquals("space available for vehicle", securityStaff.security(parkingLot));
+        parkingLot.register(securityStaff);
+        try {
+            String vehicle1 = "vehicle1";
+            String vehicle2 = "vehicle2";
+            parkingLot.park(1, vehicle1);
+            parkingLot.park(2, vehicle2);
+            parkingLot.park(3, "vehicle3");
+            parkingLot.park(4, "vehicle4");
+            //Assert.assertEquals("space available for vehicle", securityStaff.security(parkingLot));
+        } catch (ParkingLotException e) {
+            parkingLot.unPark(3);
+            boolean fullCapacity = securityStaff.isCapacityFull();
+            Assert.assertFalse(fullCapacity);
+        }
     }
 
-    @Test
-    public void givenParkingLot_WhenHaveSpace_ShouldPutOpenSign() throws ParkingLotException {
-        ParkingLotOwner parkingLotOwner = new ParkingLotOwner();
-        String vehicle1 = "vehicle1";
-        String vehicle2 = "vehicle2";
-        String vehicle3 = "vehicle3";
-        parkingLot.park(1, vehicle1);
-        parkingLot.park(2, vehicle2);
-        parkingLot.park(3, vehicle3);
-        parkingLot.unPark(1);
-        String result2 = parkingLotOwner.getUpdate(parkingLot);
-        Assert.assertEquals("parking lot is open", result2);
-    }
+
+//    @Test
+//    public void givenParkingLot_WhenHaveSpace_ShouldPutOpenSign() throws ParkingLotException {
+//        ParkingLotOwner parkingLotOwner = new ParkingLotOwner();
+//        String vehicle1 = "vehicle1";
+//        String vehicle2 = "vehicle2";
+//        String vehicle3 = "vehicle3";
+//        parkingLot.park(1, vehicle1);
+//        parkingLot.park(2, vehicle2);
+//        parkingLot.park(3, vehicle3);
+//        parkingLot.unPark(1);
+//        String result2 = parkingLotOwner.getUpdate(parkingLot);
+//        Assert.assertEquals("parking lot is open", result2);
+//    }
 
     @Test
     public void givenParkingLot_WhenNoSpace_ShouldPutOpenSign() throws ParkingLotException {
         ParkingLotOwner parkingLotOwner = new ParkingLotOwner();
-        String vehicle1 = "vehicle1";
-        String vehicle2 = "vehicle2";
-        String vehicle3 = "vehicle3";
-        parkingLot.park(1, vehicle1);
-        parkingLot.park(2, vehicle2);
-        parkingLot.park(3, vehicle3);
-        String result2 = parkingLotOwner.getUpdate(parkingLot);
-        Assert.assertEquals("parking lot is full", result2);
+        parkingLot.register(parkingLotOwner);
+        try {
+            String vehicle1 = "vehicle1";
+            String vehicle2 = "vehicle2";
+            String vehicle3 = "vehicle3";
+            String vehicle4 = "vehicle4";
+            parkingLot.park(1, vehicle1);
+            parkingLot.park(2, vehicle2);
+            parkingLot.park(3, vehicle3);
+            parkingLot.park(4, vehicle4);
+        } catch (ParkingLotException e) {
+            parkingLot.unPark(3);
+            boolean fullCapacity = parkingLotOwner.isCapacityFull();
+            Assert.assertFalse(fullCapacity);
+        }
+
     }
 
     @Test
@@ -123,5 +147,4 @@ public class ParkingLotTest {
         boolean result2 = parkingLot.isVehicleParked("vehicle");
         Assert.assertTrue(result2);
     }
-
 }
