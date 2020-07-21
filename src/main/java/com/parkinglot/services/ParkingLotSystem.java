@@ -1,7 +1,7 @@
-package com.parkinglotTest.services;
+package com.parkinglot.services;
 
-import com.parkinglotTest.Observers.ParkingLotObserver;
-import com.parkinglotTest.exception.ParkingLotException;
+import com.parkinglot.Observers.ParkingLotObserver;
+import com.parkinglot.exception.ParkingLotException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,15 +9,18 @@ import java.util.List;
 import java.util.Map;
 import java.time.LocalTime;
 
+<<<<<<< HEAD:src/main/java/com/parkinglotTest/services/ParkingLot.java
 public class ParkingLot {
+=======
+public class ParkingLotSystem {
+>>>>>>> UC10_NearestSlot:src/main/java/com/parkinglot/services/ParkingLotSystem.java
     public LocalTime parkTime = null;
     public LocalTime unParkTime = null;
     int parkingLotSize = 3;
-    public String arrival;
 
     Map<Integer, String> parkingLotMap = new HashMap<>();
     List<ParkingLotObserver> observers = new ArrayList<>();
-    public ParkingLot(int lotSize) {
+    public ParkingLotSystem(int lotSize) {
         for (int i = 1; i <= lotSize; i++) {
             parkingLotMap.put(i, " ");
         }
@@ -29,22 +32,31 @@ public class ParkingLot {
 
     public void park(int slot, String vehicle) throws ParkingLotException {
         if (parkingLotMap.containsValue(vehicle))
-            throw new ParkingLotException("Vehicle is already parked", ParkingLotException.ExceptionType.ALREADY_PARKED);
+            throw new ParkingLotException("Vehicle is already parked", ParkingLotException.ExceptionType
+                                            .ALREADY_PARKED);
         if (parkingLotMap.size() >= parkingLotSize && !parkingLotMap.containsValue(" ")) {
             for (ParkingLotObserver observer : observers) {
                 observer.capacityIsFull();
             }
-            throw new ParkingLotException("Parking Lot is full", ParkingLotException.ExceptionType.PARKING_FULL);
+            throw new ParkingLotException("Parking Lot is full", ParkingLotException.ExceptionType
+                                            .PARKING_FULL);
         }
+<<<<<<< HEAD:src/main/java/com/parkinglotTest/services/ParkingLot.java
         parkingLotMap.put(slot, vehicle);
         parkTime = LocalTime.now();
+=======
+            parkingLotMap.put(slot, vehicle);
+            parkTime = LocalTime.now();
+
+
+>>>>>>> UC10_NearestSlot:src/main/java/com/parkinglot/services/ParkingLotSystem.java
     }
 
     public boolean isVehicleParked(String vehicle) {
         return parkingLotMap.containsValue(vehicle);
     }
 
-    public static <K, V> K getKey(Map<K, V> map, V value) {
+    public <K, V> K getKey(Map<K, V> map, V value) {
         for (Map.Entry<K, V> entry : map.entrySet()) {
             if (value.equals(entry.getValue())) {
                 return entry.getKey();
@@ -72,8 +84,4 @@ public class ParkingLot {
         }
         return false;
     }
-
-//    public boolean isFull() {
-//        return parkingLotMap.size() >= parkingLotSize && !parkingLotMap.containsValue(" ");
-//    }
 }

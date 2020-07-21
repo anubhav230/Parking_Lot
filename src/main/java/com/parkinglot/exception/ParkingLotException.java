@@ -1,4 +1,4 @@
-package com.parkinglotTest.exception;
+package com.parkinglot.exception;
 
 public class ParkingLotException extends Exception {
     public enum ExceptionType {

@@ -1,8 +1,7 @@
-package com.parkinglotTest.Observers;
+package com.parkinglot.Observers;
 
-import com.parkinglotTest.services.ParkingLot;
+public class ParkingLotOwner  implements ParkingLotObserver {
 
-public class SecurityStaff implements ParkingLotObserver {
     private boolean isFullCapacity;
 
     @Override
@@ -18,4 +17,5 @@ public class SecurityStaff implements ParkingLotObserver {
     public boolean isCapacityFull() {
         return this.isFullCapacity;
     }
+
 }

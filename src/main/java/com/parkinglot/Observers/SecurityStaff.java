@@ -1,12 +1,6 @@
-package com.parkinglotTest.Observers;
+package com.parkinglot.Observers;
 
-import java.util.HashMap;
-
-import com.parkinglotTest.services.ParkingLot;
-import com.parkinglotTest.services.ParkingLot.*;
-public class ParkingLotOwner  implements ParkingLotObserver {
-
-    ParkingLot parkingLot = new ParkingLot(3);
+public class SecurityStaff implements ParkingLotObserver {
     private boolean isFullCapacity;
 
     @Override
