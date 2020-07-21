@@ -1,11 +1,12 @@
 package com.parkinglotTest;
 
-import com.parkinglotTest.exception.ParkingLotException;
 import com.parkinglotTest.Observers.ParkingLotOwner;
 import com.parkinglotTest.Observers.SecurityStaff;
+import com.parkinglotTest.exception.ParkingLotException;
 import com.parkinglotTest.services.ParkingLot;
 import org.junit.Assert;
 import org.junit.Test;
+
 import java.time.LocalTime;
 
 public class ParkingLotTest {
@@ -145,7 +146,10 @@ public class ParkingLotTest {
     public void givenVehicle_WhenParked_shouldReturnParkedTime() throws ParkingLotException {
         int result = parkingLot.getSlotNumber();
         parkingLot.park(result, "vehicle1");
-        String result2 = String.valueOf(arrivalTime = LocalTime.now());
-        Assert.assertEquals(result2, parkingLot.arrival);
+        parkingLot.unPark(result);
+        Assert.assertEquals(parkingLot.parkTime, LocalTime.now());
+        Assert.assertEquals(parkingLot.unParkTime, LocalTime.now());
+
+
     }
 }
