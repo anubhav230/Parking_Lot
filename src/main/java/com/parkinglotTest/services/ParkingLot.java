@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalTime;
 
 public class ParkingLot {
-
+    public LocalTime arrivalTime = null;
     int parkingLotSize = 3;
+    public String arrival;
 
     Map<Integer, String> parkingLotMap = new HashMap<>();
     List<ParkingLotObserver> observers = new ArrayList<>();
@@ -34,6 +36,7 @@ public class ParkingLot {
             throw new ParkingLotException("Parking Lot is full", ParkingLotException.ExceptionType.PARKING_FULL);
         }
         parkingLotMap.put(slot, vehicle);
+        this.arrival = String.valueOf(this.arrivalTime = LocalTime.now());
     }
 
     public boolean isVehicleParked(String vehicle) {
