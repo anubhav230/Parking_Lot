@@ -1,11 +1,8 @@
-package com.parkinglot.models;
+package com.parkinglotTest.models;
 
-import com.parkinglot.services.ParkingLot;
-
-import java.util.List;
+import com.parkinglotTest.services.ParkingLot;
 
 public class ParkingLotOwner {
-
 
     public String getUpdate(ParkingLot parkingLot) {
         if (!parkingLot.isFull())
