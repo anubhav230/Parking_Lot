@@ -3,7 +3,6 @@ package com.parkinglotTest.services;
 import com.parkinglotTest.Observers.ParkingLotObserver;
 import com.parkinglotTest.exception.ParkingLotException;
 
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +15,7 @@ public class ParkingLot {
     int parkingLotSize = 3;
 
     Map<Integer, String> parkingLotMap = new HashMap<>();
+    //Map<Integer, String> parkingLotMap2 = new HashMap<>();
     List<ParkingLotObserver> observers = new ArrayList<>();
     public ParkingLot(int lotSize) {
         for (int i = 1; i <= lotSize; i++) {
@@ -36,15 +36,17 @@ public class ParkingLot {
             }
             throw new ParkingLotException("Parking Lot is full", ParkingLotException.ExceptionType.PARKING_FULL);
         }
-        parkingLotMap.put(slot, vehicle);
-        parkTime = LocalTime.now();
+            parkingLotMap.put(slot, vehicle);
+            parkTime = LocalTime.now();
+
+
     }
 
     public boolean isVehicleParked(String vehicle) {
         return parkingLotMap.containsValue(vehicle);
     }
 
-    public static <K, V> K getKey(Map<K, V> map, V value) {
+    public <K, V> K getKey(Map<K, V> map, V value) {
         for (Map.Entry<K, V> entry : map.entrySet()) {
             if (value.equals(entry.getValue())) {
                 return entry.getKey();

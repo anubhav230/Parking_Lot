@@ -1,5 +1,6 @@
 package com.parkinglotTest;
 
+import com.parkinglotTest.Observers.Attendant;
 import com.parkinglotTest.Observers.ParkingLotOwner;
 import com.parkinglotTest.Observers.SecurityStaff;
 import com.parkinglotTest.exception.ParkingLotException;
@@ -10,7 +11,6 @@ import org.junit.Test;
 import java.time.LocalTime;
 
 public class ParkingLotTest {
-    public LocalTime arrivalTime = null;
     ParkingLot parkingLot = new ParkingLot(3);
 
     @Test
@@ -149,7 +149,14 @@ public class ParkingLotTest {
         parkingLot.unPark(result);
         Assert.assertEquals(parkingLot.parkTime, LocalTime.now());
         Assert.assertEquals(parkingLot.unParkTime, LocalTime.now());
+    }
 
-
+    @Test
+    public void givenDriverType_WhenWantToPark_ShouldGetNearestSlot() throws ParkingLotException {
+        Attendant attendant = new Attendant();
+        int slot = attendant.parkingSlot(parkingLot);
+        parkingLot.park(slot, "vehicle");
+        boolean result = parkingLot.isVehicleParked("vehicle");
+        Assert.assertTrue(result);
     }
 }
