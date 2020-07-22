@@ -12,6 +12,7 @@ import org.junit.Test;
 import java.time.LocalTime;
 
 public class ParkingLotTest {
+
     ParkingLotSystem parkingLot = new ParkingLotSystem(3);
 
     @Test
@@ -90,7 +91,6 @@ public class ParkingLotTest {
         }
     }
 
-
     @Test
     public void givenParkingLot_WhenHaveSpace_ShouldPutCloseSign() {
         ParkingLotOwner parkingLotOwner = new ParkingLotOwner();
@@ -146,30 +146,43 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void givenVehicle_WhenParked_shouldReturnParkedTime() throws ParkingLotException, InterruptedException {
-        int result = parkingLot.getSlotNumber();
-        parkingLot.park(result, "vehicle1");
-        parkingLot.unPark(result);
-        Assert.assertEquals(parkingLot.parkTime, LocalTime.now());
-        Assert.assertEquals(parkingLot.unParkTime, LocalTime.now());
+    public void givenVehicle_WhenParked_shouldReturnParkedTime() {
+        try {
+            int result = parkingLot.getSlotNumber();
+            parkingLot.park(result, "vehicle1");
+            parkingLot.unPark(result);
+            Assert.assertEquals(parkingLot.parkTime, LocalTime.now());
+            Assert.assertEquals(parkingLot.unParkTime, LocalTime.now());
+        } catch (ParkingLotException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Test
-    public void givenDriverType_WhenWantToPark_ShouldGetNearestSlot() throws ParkingLotException {
-        Attendant attendant = new Attendant();
-        parkingLot.park(attendant.parkingSlot(parkingLot, DriverType.HANDICAP), "vehicle");
-        boolean result = parkingLot.isVehicleParked("vehicle");
-        Assert.assertTrue(result);
+    public void givenDriverType_WhenWantToPark_ShouldGetNearestSlot() {
+        try {
+            Attendant attendant = new Attendant();
+            parkingLot.park(attendant.parkingSlot(parkingLot, DriverType.HANDICAP), "vehicle");
+            boolean result = parkingLot.isVehicleParked("vehicle");
+            Assert.assertTrue(result);
+        } catch (ParkingLotException e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
     @Test
-    public void givenDriverTypeHandicap_WhenWantToPark_ShouldGetNearestSlot() throws ParkingLotException {
-        Attendant attendant = new Attendant();
-        parkingLot.park(attendant.parkingSlot(parkingLot, DriverType.NORMAL), "vehicle");
-        parkingLot.park(attendant.parkingSlot(parkingLot, DriverType.NORMAL), "vehicle2");
-        parkingLot.park(attendant.parkingSlot(parkingLot, DriverType.HANDICAP), "vehicle3");
-        boolean result = parkingLot.isVehicleParked("vehicle2");
-        Assert.assertTrue(result);
+    public void givenDriverTypeHandicap_WhenWantToPark_ShouldGetNearestSlot() {
+        try {
+            Attendant attendant = new Attendant();
+            parkingLot.park(attendant.parkingSlot(parkingLot, DriverType.NORMAL), "vehicle");
+            parkingLot.park(attendant.parkingSlot(parkingLot, DriverType.NORMAL), "vehicle2");
+            parkingLot.park(attendant.parkingSlot(parkingLot, DriverType.HANDICAP), "vehicle3");
+            boolean result = parkingLot.isVehicleParked("vehicle2");
+            Assert.assertTrue(result);
+        } catch (ParkingLotException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
 
