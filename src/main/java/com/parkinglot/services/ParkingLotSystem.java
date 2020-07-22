@@ -3,6 +3,7 @@ package com.parkinglot.services;
 import com.parkinglot.Observers.ParkingLotObserver;
 import com.parkinglot.exception.ParkingLotException;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -80,5 +81,10 @@ public class ParkingLotSystem {
         if (DriverType.HANDICAP == driverType)
             return getSlotNumber();
         return this.slot++;
+    }
+
+    public double getParkedTime() {
+        double time = ChronoUnit.MINUTES.between(unParkTime,parkTime);
+        return time;
     }
 }
