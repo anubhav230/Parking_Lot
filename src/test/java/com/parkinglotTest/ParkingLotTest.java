@@ -4,6 +4,7 @@ import com.parkinglot.Observers.Attendant;
 import com.parkinglot.Observers.ParkingLotOwner;
 import com.parkinglot.Observers.SecurityStaff;
 import com.parkinglot.exception.ParkingLotException;
+import com.parkinglot.services.DriverType;
 import com.parkinglot.services.ParkingLotSystem;
 import org.junit.Assert;
 import org.junit.Test;
@@ -154,9 +155,25 @@ public class ParkingLotTest {
     @Test
     public void givenDriverType_WhenWantToPark_ShouldGetNearestSlot() throws ParkingLotException {
         Attendant attendant = new Attendant();
-        int slot = attendant.parkingSlot(parkingLot);
+        int slot = attendant.parkingSlot(parkingLot, DriverType.HANDICAP);
         parkingLot.park(slot, "vehicle");
         boolean result = parkingLot.isVehicleParked("vehicle");
         Assert.assertTrue(result);
     }
+
+    @Test
+    public void givenDriverTypeHandicap_WhenWantToPark_ShouldGetNearestSlot() {
+        Attendant attendant = new Attendant();
+        try {
+            parkingLot.park(attendant.parkingSlot(parkingLot, DriverType.NORMAL), "vehicle");
+            parkingLot.park(attendant.parkingSlot(parkingLot, DriverType.NORMAL), "vehicle2");
+            parkingLot.park(attendant.parkingSlot(parkingLot, DriverType.HANDICAP), "vehicle3");
+            boolean result = parkingLot.isVehicleParked("vehicle2");
+            Assert.assertTrue(result);
+        } catch (ParkingLotException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
 }
+

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.time.LocalTime;
+import java.util.stream.IntStream;
 
 
 
@@ -18,10 +19,10 @@ public class ParkingLotSystem {
 
     Map<Integer, String> parkingLotMap = new HashMap<>();
     List<ParkingLotObserver> observers = new ArrayList<>();
+    private int slot = 1;
+
     public ParkingLotSystem(int lotSize) {
-        for (int i = 1; i <= lotSize; i++) {
-            parkingLotMap.put(i, " ");
-        }
+        IntStream.rangeClosed(1, lotSize).forEach(i -> parkingLotMap.put(i, " "));
     }
 
     public void register(ParkingLotObserver observer) {
@@ -45,7 +46,7 @@ public class ParkingLotSystem {
 
             parkingLotMap.put(slot, vehicle);
             parkTime = LocalTime.now();
-
+            this.slot = slot;
 
 
     }
@@ -56,9 +57,8 @@ public class ParkingLotSystem {
 
     public <K, V> K getKey(Map<K, V> map, V value) {
         for (Map.Entry<K, V> entry : map.entrySet()) {
-            if (value.equals(entry.getValue())) {
+            if (value.equals(entry.getValue()))
                 return entry.getKey();
-            }
         }
         return null;
     }
@@ -81,5 +81,11 @@ public class ParkingLotSystem {
             return true;
         }
         return false;
+    }
+
+    public int getSlotNumber(DriverType driverType) {
+        if (DriverType.HANDICAP == driverType)
+            return getSlotNumber();
+        return this.slot++;
     }
 }
