@@ -1,6 +1,7 @@
 package com.parkinglot.Observers;
 
 public class SecurityStaff implements ParkingLotObserver {
+
     private boolean isFullCapacity;
 
     @Override
