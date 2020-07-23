@@ -1,6 +1,9 @@
 package com.parkinglotTest.Observers;
 
+
 public class ParkingLotOwner  implements ParkingLotObserver {
+
+
 
     private boolean isFullCapacity;
 

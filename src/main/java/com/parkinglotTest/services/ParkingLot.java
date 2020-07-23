@@ -29,12 +29,14 @@ public class ParkingLot {
 
     public void park(int slot, String vehicle) throws ParkingLotException {
         if (parkingLotMap.containsValue(vehicle))
-            throw new ParkingLotException("Vehicle is already parked", ParkingLotException.ExceptionType.ALREADY_PARKED);
+            throw new ParkingLotException("Vehicle is already parked", ParkingLotException
+                                            .ExceptionType.ALREADY_PARKED);
         if (parkingLotMap.size() >= parkingLotSize && !parkingLotMap.containsValue(" ")) {
             for (ParkingLotObserver observer : observers) {
                 observer.capacityIsFull();
             }
-            throw new ParkingLotException("Parking Lot is full", ParkingLotException.ExceptionType.PARKING_FULL);
+            throw new ParkingLotException("Parking Lot is full", ParkingLotException
+                                            .ExceptionType.PARKING_FULL);
         }
         parkingLotMap.put(slot, vehicle);
         parkTime = LocalTime.now();
@@ -59,6 +61,7 @@ public class ParkingLot {
 
     public int getVehicleValue(String value) {
         return getKey(parkingLotMap, value);
+
     }
 
     public boolean unPark(int slot) {
