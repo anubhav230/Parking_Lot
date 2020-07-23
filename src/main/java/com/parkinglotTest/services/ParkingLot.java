@@ -4,23 +4,22 @@ import com.parkinglotTest.Observers.ParkingLotObserver;
 import com.parkinglotTest.exception.ParkingLotException;
 
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.time.LocalTime;
 
 public class ParkingLot {
     public LocalTime parkTime = null;
     public LocalTime unParkTime = null;
     int parkingLotSize = 3;
+    List<ParkingLot> parkingLotList = new ArrayList<>();
 
-    Map<Integer, String> parkingLotMap = new HashMap<>();
-    List<ParkingLotObserver> observers = new ArrayList<>();
+    Map<Integer, String> parkingLotMap;
+    List<ParkingLotObserver> observers;
+
     public ParkingLot(int lotSize) {
-        for (int i = 1; i <= lotSize; i++) {
-            parkingLotMap.put(i, " ");
-        }
+        observers = new ArrayList<>();
+        parkingLotMap = new HashMap<>();
+        initializeParkingLot(lotSize);
     }
 
     public void register(ParkingLotObserver observer) {
@@ -30,13 +29,13 @@ public class ParkingLot {
     public void park(int slot, String vehicle) throws ParkingLotException {
         if (parkingLotMap.containsValue(vehicle))
             throw new ParkingLotException("Vehicle is already parked", ParkingLotException
-                                            .ExceptionType.ALREADY_PARKED);
+                    .ExceptionType.ALREADY_PARKED);
         if (parkingLotMap.size() >= parkingLotSize && !parkingLotMap.containsValue(" ")) {
             for (ParkingLotObserver observer : observers) {
                 observer.capacityIsFull();
             }
             throw new ParkingLotException("Parking Lot is full", ParkingLotException
-                                            .ExceptionType.PARKING_FULL);
+                    .ExceptionType.PARKING_FULL);
         }
         parkingLotMap.put(slot, vehicle);
         parkTime = LocalTime.now();
@@ -62,6 +61,12 @@ public class ParkingLot {
     public int getVehicleValue(String value) {
         return getKey(parkingLotMap, value);
 
+    }
+
+    public void initializeParkingLot(int lotSize) {
+        for (int i = 1; i <= lotSize; i++) {
+            parkingLotMap.put(i, " ");
+        }
     }
 
     public boolean unPark(int slot) {
