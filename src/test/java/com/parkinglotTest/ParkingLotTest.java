@@ -13,27 +13,41 @@ import java.time.LocalTime;
 
 public class ParkingLotTest {
 
-    ParkingLotSystem parkingLot = new ParkingLotSystem(3);
+    ParkingLotSystem parkingLot = new ParkingLotSystem(4);
 
     @Test
-    public void givenCarAndUser_WhenPark_ShouldPark() throws ParkingLotException {
-        parkingLot.park(1, "vehicle");
-        boolean result = parkingLot.isVehicleParked("vehicle");
-        Assert.assertTrue(result);
+    public void givenCarAndUser_WhenPark_ShouldPark() {
+        try {
+            parkingLot.park(1, "vehicle");
+            boolean result = parkingLot.isVehicleParked("vehicle");
+            Assert.assertTrue(result);
+        } catch (ParkingLotException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Test
-    public void givenCar_WhenUnParked_ShouldReturnTrueResult() throws ParkingLotException {
-        parkingLot.park(1, "vehicle");
-        boolean result2 = parkingLot.unPark(1);
-        Assert.assertTrue(result2);
+    public void givenCar_WhenUnParked_ShouldReturnTrueResult() {
+        try {
+            parkingLot.park(1, "vehicle");
+            boolean result2 = parkingLot.unPark(1);
+            Assert.assertTrue(result2);
+        } catch (ParkingLotException e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
     @Test
-    public void givenCarToUnPark_WhenNotPresent_ShouldReturnFalse() throws ParkingLotException {
-        parkingLot.park(1, "vehicle");
-        boolean result2 = parkingLot.unPark(4);
-        Assert.assertFalse(result2);
+    public void givenCarToUnPark_WhenNotPresent_ShouldReturnFalse() {
+        try {
+            parkingLot.park(1, "vehicle");
+            boolean result2 = parkingLot.unPark(4);
+            Assert.assertFalse(result2);
+        } catch (ParkingLotException e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
     @Test

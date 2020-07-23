@@ -12,16 +12,19 @@ import java.time.LocalTime;
 import java.util.stream.IntStream;
 
 public class ParkingLotSystem {
+
+    Map<Integer, String> parkingLotMap;
+    List<ParkingLotObserver> observers;
     public LocalTime parkTime = null;
     public LocalTime unParkTime = null;
-    int parkingLotSize = 3;
-
-    Map<Integer, String> parkingLotMap = new HashMap<>();
-    List<ParkingLotObserver> observers = new ArrayList<>();
+    int parkingLotSize;
     private int slot = 1;
 
     public ParkingLotSystem(int lotSize) {
-        IntStream.rangeClosed(1, lotSize).forEach(i -> parkingLotMap.put(i, " "));
+        observers = new ArrayList<>();
+        parkingLotMap = new HashMap<>();
+        this.parkingLotSize = lotSize;
+        initialiseParkingLot();
     }
 
     public void register(ParkingLotObserver observer) {
@@ -30,18 +33,17 @@ public class ParkingLotSystem {
 
     public void park(int slot, String vehicle) throws ParkingLotException {
         if (parkingLotMap.containsValue(vehicle))
-            throw new ParkingLotException("Vehicle is already parked", ParkingLotException.ExceptionType
-                                            .ALREADY_PARKED);
+            throw new ParkingLotException("Vehicle is already parked", ParkingLotException.ExceptionType.ALREADY_PARKED);
         if (parkingLotMap.size() >= parkingLotSize && !parkingLotMap.containsValue(" ")) {
             for (ParkingLotObserver observer : observers) {
                 observer.capacityIsFull();
             }
             throw new ParkingLotException("Parking Lot is full", ParkingLotException.ExceptionType
-                                            .PARKING_FULL);
+                    .PARKING_FULL);
         }
-            parkingLotMap.put(slot, vehicle);
-            parkTime = LocalTime.now();
-            this.slot = slot;
+        parkingLotMap.put(slot, vehicle);
+        parkTime = LocalTime.now();
+        this.slot = slot;
 
     }
 
@@ -83,8 +85,8 @@ public class ParkingLotSystem {
         return this.slot++;
     }
 
-    public double getParkedTime() {
-        double time = ChronoUnit.MINUTES.between(unParkTime,parkTime);
-        return time;
+    public void initialiseParkingLot() {
+        IntStream.rangeClosed(1, parkingLotSize).forEach(i -> parkingLotMap.put(i, " "));
     }
+
 }

@@ -21,7 +21,7 @@ public class ParkingLotOwner  implements ParkingLotObserver {
         return this.isFullCapacity;
     }
 
-    public int whereToPark(ParkingLotSystem parkingLotSystem, DriverType driverType) {
+    public static int whereToPark(ParkingLotSystem parkingLotSystem, DriverType driverType) {
         return parkingLotSystem.getSlotNumber(driverType);
     }
 }
