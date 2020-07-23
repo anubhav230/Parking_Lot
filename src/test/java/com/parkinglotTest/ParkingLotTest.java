@@ -1,39 +1,52 @@
 package com.parkinglotTest;
 
-import com.parkinglotTest.exception.ParkingLotException;
 import com.parkinglotTest.Observers.ParkingLotOwner;
 import com.parkinglotTest.Observers.SecurityStaff;
+import com.parkinglotTest.exception.ParkingLotException;
 import com.parkinglotTest.services.ParkingLot;
 import org.junit.Assert;
 import org.junit.Test;
+
 import java.time.LocalTime;
 
 public class ParkingLotTest {
-    public LocalTime arrivalTime = null;
+
     ParkingLot parkingLot = new ParkingLot(3);
 
     @Test
-    public void givenCarAndUser_WhenPark_ShouldPark() throws ParkingLotException {
-        int slot = parkingLot.getSlotNumber();
-        parkingLot.park(slot, "vehicle");
-        boolean result = parkingLot.isVehicleParked("vehicle");
-        Assert.assertTrue(result);
+    public void givenCarAndUser_WhenPark_ShouldPark() {
+        try {
+            int slot = parkingLot.getSlotNumber();
+            parkingLot.park(slot, "vehicle");
+            boolean result = parkingLot.isVehicleParked("vehicle");
+            Assert.assertTrue(result);
+        } catch (ParkingLotException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Test
-    public void givenCar_WhenUnParked_ShouldReturnTrueResult() throws ParkingLotException {
-        int slot = parkingLot.getSlotNumber();
-        parkingLot.park(slot, "vehicle");
-        boolean result2 = parkingLot.unPark(slot);
-        Assert.assertTrue(result2);
+    public void givenCar_WhenUnParked_ShouldReturnTrueResult() {
+        try {
+            int slot = parkingLot.getSlotNumber();
+            parkingLot.park(slot, "vehicle");
+            boolean result2 = parkingLot.unPark(slot);
+            Assert.assertTrue(result2);
+        } catch (ParkingLotException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Test
-    public void givenCarToUnPark_WhenNotPresent_ShouldReturnFalse() throws ParkingLotException {
-        int slot = parkingLot.getSlotNumber();
-        parkingLot.park(slot, "vehicle");
-        boolean result2 = parkingLot.unPark(4);
-        Assert.assertFalse(result2);
+    public void givenCarToUnPark_WhenNotPresent_ShouldReturnFalse() {
+        try {
+            int slot = parkingLot.getSlotNumber();
+            parkingLot.park(slot, "vehicle");
+            boolean result2 = parkingLot.unPark(4);
+            Assert.assertFalse(result2);
+        } catch (ParkingLotException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Test
@@ -91,7 +104,6 @@ public class ParkingLotTest {
         }
     }
 
-
     @Test
     public void givenParkingLot_WhenHaveSpace_ShouldPutCloseSign() {
         ParkingLotOwner parkingLotOwner = new ParkingLotOwner();
@@ -125,28 +137,42 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void givenVehicle_ShouldParkOnEmptySlot() throws ParkingLotException {
-        int result = parkingLot.getSlotNumber();
-        parkingLot.park(result, "vehicle");
-        boolean result3 = parkingLot.isVehicleParked("vehicle");
-        Assert.assertTrue(result3);
+    public void givenVehicle_ShouldParkOnEmptySlot() {
+        try {
+            int result = parkingLot.getSlotNumber();
+            parkingLot.park(result, "vehicle");
+            boolean result3 = parkingLot.isVehicleParked("vehicle");
+            Assert.assertTrue(result3);
+
+        } catch (ParkingLotException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Test
-    public void givenSlot_WhenDriverWantToUnPark_ShouldUnParkVehicle() throws ParkingLotException {
-        int result = parkingLot.getSlotNumber();
-        parkingLot.park(result, "vehicle1");
-        int result2 = parkingLot.getVehicleValue("vehicle1");
-        boolean unPark = parkingLot.unPark(result2);
-        Assert.assertTrue(unPark);
+    public void givenSlot_WhenDriverWantToUnPark_ShouldUnParkVehicle() {
+        try {
+            int result = parkingLot.getSlotNumber();
+            parkingLot.park(result, "vehicle1");
+            int result2 = parkingLot.getVehicleValue("vehicle1");
+            boolean unPark = parkingLot.unPark(result2);
+            Assert.assertTrue(unPark);
+        } catch (ParkingLotException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Test
-    public void givenVehicle_WhenParked_shouldReturnParkedTime() throws ParkingLotException {
-        int result = parkingLot.getSlotNumber();
-        parkingLot.park(result, "vehicle1");
-        parkingLot.unPark(result);
-        Assert.assertEquals(parkingLot.parkTime, LocalTime.now());
-        Assert.assertEquals(parkingLot.unParkTime, LocalTime.now());
+    public void givenVehicle_WhenParked_shouldReturnParkedTime() {
+        try {
+            int result = parkingLot.getSlotNumber();
+            parkingLot.park(result, "vehicle1");
+            parkingLot.unPark(result);
+            Assert.assertEquals(parkingLot.parkTime, LocalTime.now());
+            Assert.assertEquals(parkingLot.unParkTime, LocalTime.now());
+        } catch (ParkingLotException e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 }
