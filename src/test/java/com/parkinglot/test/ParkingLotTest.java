@@ -1,10 +1,9 @@
-package com.parkinglotTest;
+package com.parkinglot.test;
 
-import com.parkinglotTest.Observers.ParkingLotOwner;
-import com.parkinglotTest.Observers.SecurityStaff;
-import com.parkinglotTest.exception.ParkingLotException;
-import com.parkinglotTest.services.ParkingLot;
-import com.parkinglotTest.services.Slot;
+import com.parkinglot.Observers.ParkingLotOwner;
+import com.parkinglot.Observers.SecurityStaff;
+import com.parkinglot.exception.ParkingLotException;
+import com.parkinglot.services.ParkingLot;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,14 +1,14 @@
-package com.parkinglotTest.services;
+package com.parkinglot.services;
 
-import com.parkinglotTest.Observers.ParkingLotObserver;
-import com.parkinglotTest.exception.ParkingLotException;
+import com.parkinglot.Observers.ParkingLotObserver;
+import com.parkinglot.exception.ParkingLotException;
+import com.parkinglot.models.Slot;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 public class ParkingLot {
     int parkingLotSize;

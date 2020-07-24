@@ -1,4 +1,4 @@
-package com.parkinglotTest.services;
+package com.parkinglot.models;
 
 import java.time.LocalTime;
 import java.util.Objects;
