@@ -71,7 +71,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void givenParkingLot_WhenFull_ShouldRedirectSecurity() {
+    public void givenParkingLotCapacity_WhenFull_ShouldInformSecurity() {
         SecurityStaff securityStaff = new SecurityStaff();
         parkingLots.register(securityStaff);
         try {
@@ -86,7 +86,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void givenParkingLot_WhenHasSpace_ShouldNotRedirectSecurity() {
+    public void givenParkingLotCapacity_WhenHasSpace_ShouldReturnFalse() {
         SecurityStaff securityStaff = new SecurityStaff();
         parkingLots.register(securityStaff);
         try {
@@ -102,7 +102,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void givenParkingLot_WhenHaveSpace_ShouldPutCloseSign() {
+    public void givenParkingLotCapacity_WhenFull_ShouldReturnTrue() {
         ParkingLotOwner parkingLotOwner = new ParkingLotOwner();
         parkingLots.register(parkingLotOwner);
         try {
@@ -117,7 +117,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void givenParkingLot_WhenNoSpace_ShouldPutOpenSign() {
+    public void givenParkingLotCapacity_WhenAgainHaveSpace_ShouldReturnFalse() {
         ParkingLotOwner parkingLotOwner = new ParkingLotOwner();
         parkingLots.register(parkingLotOwner);
         try {
@@ -155,6 +155,7 @@ public class ParkingLotTest {
         }
     }
 
+
     @Test
     public void givenVehicle_WhenParkedEvenly_ShouldReturnVehicleSlot() {
         ParkingLotSystem parkingService = new ParkingLotSystem(3, 3);
@@ -168,6 +169,7 @@ public class ParkingLotTest {
             parkingService.park("vehicle7");
             parkingService.unPark("vehicle5");
             Assert.assertEquals("1,2", parkingService.vehicleLocation("vehicle6"));
+            Assert.assertEquals(null, parkingService.vehicleLocation("vehicle5"));
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }

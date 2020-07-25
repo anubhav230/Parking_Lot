@@ -12,8 +12,8 @@ public class ParkingLotSystem {
     private final int numberOfLots;
     private final int lotSize;
 
-    private List<ParkingLotObserver> observers;
-    private List<ParkingLot> parkingLots;
+    private final List<ParkingLotObserver> observers;
+    private final List<ParkingLot> parkingLots;
 
     public ParkingLotSystem(int lotSize, int numberOfLots) {
         parkingLots = new ArrayList<>();
@@ -66,8 +66,7 @@ public class ParkingLotSystem {
 
     public boolean isSizeFull() {
         int vehicleCount = parkingLots.stream().mapToInt(ParkingLot::getNumberOfVehicles).sum();
-        boolean availability = (lotSize * numberOfLots) == vehicleCount;
-        return availability;
+        return (lotSize * numberOfLots) == vehicleCount;
     }
 
     public boolean unPark(String vehicle) {
