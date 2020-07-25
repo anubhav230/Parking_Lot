@@ -29,11 +29,11 @@ public class Slot {
                 Objects.equals(time, slot.time);
     }
 
-    @Override
-    public String toString() {
-        return "Slot{" +
-                "vehicle='" + vehicle + '\'' +
-                ", time=" + time +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Slot{" +
+//                "vehicle='" + vehicle + '\'' +
+//                ", time=" + time +
+//                '}';
+//    }
 }

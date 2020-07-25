@@ -1,14 +1,11 @@
 package com.parkinglot.services;
 
 import com.parkinglot.models.Slot;
-
-import java.time.LocalTime;
 import java.util.*;
 
 public class ParkingLot {
     int parkingLotSize;
     public Map<Integer, Slot> parkingLotMap;
-
 
     public ParkingLot(int parkingLotSize) {
         this.parkingLotSize = parkingLotSize;
@@ -30,8 +27,4 @@ public class ParkingLot {
         }
         return numberOfVehicles;
     }
-//    public LocalTime getParkTime(int Slot) {
-//        return parkingLotMap.get(Slot).getTime();
-//    }
-
 }

@@ -145,32 +145,32 @@ public class ParkingLotTest {
         }
     }
 
-//    @Test
-//    public void givenVehicle_WhenParked_shouldReturnParkedTime() {
-//        ParkingLot parkingLot = new ParkingLot(2);
-//        try {
-//            parkingLots.park("vehicle2");
-//            LocalTime time = parkingLot.getParkTime(spot);
-//            Assert.assertEquals(LocalTime.now().withNano(0), time.withNano(0));
-//        } catch (ParkingLotException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
+    @Test
+    public void givenVehicle_WhenParked_shouldReturnParkedTime() {
+        try {
+            parkingLots.park("vehicle2");
+            LocalTime time = parkingLots.getParkTime(1);
+            Assert.assertEquals(LocalTime.now().withNano(0), time.withNano(0));
+        } catch (ParkingLotException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     @Test
-    public void givenVehicle_WhenParkedAndUnParkedInLot_ShouldReturnVehicleSlotInLot() {
+    public void givenVehicle_WhenParkedEvenly_ShouldReturnVehicleSlot() {
         ParkingLotSystem parkingService = new ParkingLotSystem(3, 3);
         try {
             parkingService.park("vehicle1");
             parkingService.park("vehicle2");
             parkingService.park("vehicle3");
             parkingService.park("vehicle4");
-            System.out.println(parkingService.parkingLots.get(0).parkingLotMap);
+            parkingService.park("vehicle5");
+            parkingService.park("vehicle6");
+            parkingService.park("vehicle7");
             Assert.assertEquals(parkingService.parkingLots.get(1).parkingLotMap.get(1).vehicle, "vehicle2");
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }
     }
-
 
 }
