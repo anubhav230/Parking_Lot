@@ -3,7 +3,6 @@ package com.parkinglot.test;
 import com.parkinglot.Observers.ParkingLotOwner;
 import com.parkinglot.Observers.SecurityStaff;
 import com.parkinglot.exception.ParkingLotException;
-import com.parkinglot.services.ParkingLot;
 import com.parkinglot.services.ParkingLotSystem;
 import org.junit.Assert;
 import org.junit.Test;
@@ -149,7 +148,7 @@ public class ParkingLotTest {
     public void givenVehicle_WhenParked_shouldReturnParkedTime() {
         try {
             parkingLots.park("vehicle2");
-            LocalTime time = parkingLots.getParkTime(1);
+            LocalTime time = parkingLots.getParkTime("vehicle2");
             Assert.assertEquals(LocalTime.now().withNano(0), time.withNano(0));
         } catch (ParkingLotException e) {
             System.out.println(e.getMessage());
@@ -167,10 +166,10 @@ public class ParkingLotTest {
             parkingService.park("vehicle5");
             parkingService.park("vehicle6");
             parkingService.park("vehicle7");
-            Assert.assertEquals(parkingService.parkingLots.get(1).parkingLotMap.get(1).vehicle, "vehicle2");
+            parkingService.unPark("vehicle5");
+            Assert.assertEquals("1,2", parkingService.vehicleLocation("vehicle6"));
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }
     }
-
 }

@@ -2,29 +2,26 @@ package com.parkinglot.services;
 
 import com.parkinglot.models.Slot;
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class ParkingLot {
     int parkingLotSize;
-    public Map<Integer, Slot> parkingLotMap;
+    public Map<Integer, Slot> parkingSlotMap;
 
     public ParkingLot(int parkingLotSize) {
         this.parkingLotSize = parkingLotSize;
-        parkingLotMap = new LinkedHashMap<>();
+        parkingSlotMap = new LinkedHashMap<>();
         initialiseParkingLot(parkingLotSize);
     }
 
     public void initialiseParkingLot(int lotSize) {
-        for (int i = 1; i <= lotSize; i++) {
-            parkingLotMap.put(i, null);
-        }
+        IntStream.rangeClosed(1, lotSize)
+                .forEach(i -> parkingSlotMap.put(i, null));
     }
 
     public int getNumberOfVehicles() {
-        int numberOfVehicles = 0;
-        for (int i = 1; i <= parkingLotMap.size(); i++) {
-            if (parkingLotMap.get(i) != null)
-                numberOfVehicles++;
-        }
+        int numberOfVehicles = (int) IntStream.rangeClosed(1, parkingSlotMap
+                .size()).filter(i -> parkingSlotMap.get(i) != null).count();
         return numberOfVehicles;
     }
 }
