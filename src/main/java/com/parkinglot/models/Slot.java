@@ -1,4 +1,4 @@
-package com.parkinglotTest.services;
+package com.parkinglot.models;
 
 import java.time.LocalTime;
 import java.util.Objects;
@@ -27,5 +27,13 @@ public class Slot {
         Slot slot = (Slot) o;
         return Objects.equals(vehicle, slot.vehicle) &&
                 Objects.equals(time, slot.time);
+    }
+
+    @Override
+    public String toString() {
+        return "Slot{" +
+                "vehicle='" + vehicle + '\'' +
+                ", time=" + time +
+                '}';
     }
 }
