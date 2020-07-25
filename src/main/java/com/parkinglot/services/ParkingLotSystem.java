@@ -1,92 +1,116 @@
+
 package com.parkinglot.services;
 
 import com.parkinglot.Observers.ParkingLotObserver;
 import com.parkinglot.exception.ParkingLotException;
+import com.parkinglot.models.Slot;
 
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.time.LocalTime;
-import java.util.stream.IntStream;
+import java.util.*;
 
 public class ParkingLotSystem {
+    private final int numberOfLots;
+    private final int lotSize;
 
-    Map<Integer, String> parkingLotMap;
-    List<ParkingLotObserver> observers;
-    public LocalTime parkTime = null;
-    public LocalTime unParkTime = null;
-    int parkingLotSize;
-    private int slot = 1;
+    public List<ParkingLotObserver> observers;
+    public List<ParkingLot> parkingLots;
 
-    public ParkingLotSystem(int lotSize) {
+
+    public ParkingLotSystem(int lotSize, int numberOfLots) {
+        parkingLots = new ArrayList<>();
         observers = new ArrayList<>();
-        parkingLotMap = new HashMap<>();
-        this.parkingLotSize = lotSize;
-        initialiseParkingLot();
+        this.numberOfLots = numberOfLots;
+        this.lotSize = lotSize;
+        initialiseParkingLot(numberOfLots);
     }
 
     public void register(ParkingLotObserver observer) {
         this.observers.add(observer);
     }
 
-    public void park(int slot, String vehicle) throws ParkingLotException {
-        if (parkingLotMap.containsValue(vehicle))
-            throw new ParkingLotException("Vehicle is already parked", ParkingLotException.ExceptionType.ALREADY_PARKED);
-        if (parkingLotMap.size() >= parkingLotSize && !parkingLotMap.containsValue(" ")) {
-            for (ParkingLotObserver observer : observers) {
-                observer.capacityIsFull();
-            }
-            throw new ParkingLotException("Parking Lot is full", ParkingLotException.ExceptionType
-                    .PARKING_FULL);
+    public void park(DriverType driverType, String vehicle) throws ParkingLotException {
+        if (isVehicleParked(vehicle))
+            throw new ParkingLotException("Vehicle is already parked", ParkingLotException
+                    .ExceptionType.ALREADY_PARKED);
+        if (isSizeFull()) {
+            observers.forEach(ParkingLotObserver::capacityIsFull);
+            throw new ParkingLotException("Parking Lot is full", ParkingLotException
+                    .ExceptionType.PARKING_FULL);
         }
-        parkingLotMap.put(slot, vehicle);
-        parkTime = LocalTime.now();
-        this.slot = slot;
-
+        Slot slotValue = new Slot(vehicle, LocalTime.now().withNano(0));
+        ParkingLot parkingLot = getLot(this.parkingLots);
+        Integer slot1 = getSpot(parkingLot);
+        parkingLot.parkingLotMap.put(slot1, slotValue);
     }
 
     public boolean isVehicleParked(String vehicle) {
-        return parkingLotMap.containsValue(vehicle);
+        for (ParkingLot parkingLot : parkingLots)
+            for (Map.Entry<Integer, Slot> entry : parkingLot.parkingLotMap.entrySet()) {
+                if (entry.getValue() != null) {
+                    if (entry.getValue().getVehicle().equals(vehicle)) {
+                        return true;
+                    }
+                }
+            }
+        return false;
     }
 
-    public <K, V> K getKey(Map<K, V> map, V value) {
-        for (Map.Entry<K, V> entry : map.entrySet()) {
-            if (value.equals(entry.getValue()))
-                return entry.getKey();
+    public Integer getSpot(ParkingLot parkingLot) {
+        for (int i = 1; i <= parkingLot.parkingLotMap.size(); i++) {
+            if (parkingLot.parkingLotMap.get(i) == null)
+                return i;
         }
         return null;
     }
 
-    public int getSlotNumber() {
-        return getKey(parkingLotMap, " ");
+    public boolean isSizeFull() {
+        int vehicleCount = parkingLots.stream().mapToInt(ParkingLot::getNumberOfVehicles).sum();
+        boolean availability = (lotSize * numberOfLots) == vehicleCount;
+        return availability;
     }
 
-    public int getVehicleValue(String value) {
-        return getKey(parkingLotMap, value);
-    }
-
-    public boolean unPark(int slot) {
-        if (parkingLotMap.containsKey(slot)) {
-            parkingLotMap.put(slot, " ");
-            unParkTime = LocalTime.now();
-            for (ParkingLotObserver observer : observers) {
-                observer.capacityIsAvailable();
+    public boolean unPark(String vehicle) {
+        ParkingLot parkingLot = vehicleLot(vehicle);
+        if (parkingLot == null)
+            return false;
+        for (Map.Entry<Integer, Slot> entry : parkingLot.parkingLotMap.entrySet()) {
+            if (vehicle.equals(entry.getValue().getVehicle())) {
+                Integer key = entry.getKey();
+                parkingLot.parkingLotMap.put(key, null);
+                observers.forEach(ParkingLotObserver::capacityIsAvailable);
+                return true;
             }
-            return true;
         }
         return false;
     }
 
-    public int getSlotNumber(DriverType driverType) {
-        if (DriverType.HANDICAP == driverType)
-            return getSlotNumber();
-        return this.slot++;
+    public ParkingLot vehicleLot(String vehicle) {
+        for (ParkingLot parkingLot : parkingLots)
+            for (Map.Entry<Integer, Slot> entry : parkingLot.parkingLotMap.entrySet()) {
+                if (entry.getValue().getVehicle().equals(vehicle)) {
+                    return parkingLot;
+                }
+            }
+        return null;
     }
 
-    public void initialiseParkingLot() {
-        IntStream.rangeClosed(1, parkingLotSize).forEach(i -> parkingLotMap.put(i, " "));
+    public void initialiseParkingLot(int lotSize) {
+        for (int i = 0; i < lotSize; i++) {
+            parkingLots.add(i, new ParkingLot(lotSize));
+        }
     }
+
+    public ParkingLot getLot(List<ParkingLot> parkingLots) {
+        List<ParkingLot> parkingLotList = parkingLots;
+        parkingLots.sort(Comparator.comparing(ParkingLot::getNumberOfVehicles));
+        return parkingLotList.get(0);
+    }
+
+    public LocalTime getParkTime(int vehicle) {
+        for (ParkingLot parkingLot : parkingLots)
+            return parkingLot.parkingLotMap.get(vehicle).getTime();
+        return null;
+    }
+
 
 }
