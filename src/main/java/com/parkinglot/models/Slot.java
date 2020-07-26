@@ -28,4 +28,12 @@ public class Slot {
         return Objects.equals(vehicle, slot.vehicle) &&
                 Objects.equals(time, slot.time);
     }
+
+    @Override
+    public String toString() {
+        return "Slot{" +
+                "vehicle='" + vehicle + '\'' +
+                ", time=" + time +
+                '}';
+    }
 }

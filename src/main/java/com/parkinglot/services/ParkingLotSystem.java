@@ -12,7 +12,8 @@ public class ParkingLotSystem {
     private final int numberOfLots;
     private final int lotSize;
     private final List<ParkingLotObserver> observers;
-    private final List<ParkingLot> parkingLots;
+    public final List<ParkingLot> parkingLots;
+    private Integer key;
 
     public ParkingLotSystem(int lotSize, int numberOfLots) {
         parkingLots = new ArrayList<>();
@@ -26,7 +27,7 @@ public class ParkingLotSystem {
         this.observers.add(observer);
     }
 
-    public void park(DriverType driverType, String vehicle) throws ParkingLotException {
+    public void park(DriverType driverType, Vehicle vehicleType, String vehicle) throws ParkingLotException {
         if (isVehicleParked(vehicle))
             throw new ParkingLotException("Vehicle is already parked", ParkingLotException
                     .ExceptionType.ALREADY_PARKED);
@@ -37,24 +38,45 @@ public class ParkingLotSystem {
         }
         Slot slotValue = new Slot(vehicle, LocalTime.now().withNano(0));
         ParkingLot parkingLot;
-        if (driverType == DriverType.NORMAL) {
-            parkingLot = getLot(parkingLots);
-        } else  {
-            parkingLot = handicapDriver();
+        Integer slot;
+        if (vehicleType == Vehicle.SMALL) {
+            if (driverType == DriverType.NORMAL) {
+                parkingLot = getLot(parkingLots);
+            } else {
+                parkingLot = handicapDriver();
+            }
+            slot = this.getSpot(parkingLot);
+        } else {
+            parkingLot = largeVehiclePark(parkingLots);
+            slot = this.getSpot(parkingLot);
         }
-        int slot1 = this.getSpot(parkingLot);
-        parkingLot.parkingSlotMap.put(slot1, slotValue);
+        parkingLot.parkingSlotMap.put(slot, slotValue);
     }
 
     public ParkingLot handicapDriver() {
         for (ParkingLot parkingLot : parkingLots) {
             for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet()) {
-                if (entry.getValue() == null) {
+                key = entry.getKey();
+                if (parkingLot.parkingSlotMap.get(key) == null && parkingLot.parkingSlotMap.get(key + 1) == null) {
                     return parkingLot;
                 }
             }
         }
         return null;
+    }
+
+    public ParkingLot largeVehiclePark(List<ParkingLot> parkingLots) throws ParkingLotException {
+        for (ParkingLot parkingLot : parkingLots) {
+            for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet()) {
+                key = entry.getKey();
+                if (key < lotSize)
+                    if (parkingLot.parkingSlotMap.get(key) == null && parkingLot.parkingSlotMap.get(key + 1) == null) {
+                        return parkingLot;
+                    }
+            }
+        }
+        throw new ParkingLotException("there is no place for large vehicle", ParkingLotException
+                .ExceptionType.NO_PLACE_FOR_LARGE_VEHICLE);
     }
 
     public boolean isVehicleParked(String vehicle) {
@@ -90,7 +112,6 @@ public class ParkingLotSystem {
                 if (entry.getValue() != null) {
                     if (entry.getValue().getVehicle().equals(vehicle)) {
                         Integer key = entry.getKey();
-                        System.out.println(key);
                         parkingLot.parkingSlotMap.put(key, null);
                         observers.forEach(ParkingLotObserver::capacityIsAvailable);
                         return true;
@@ -106,7 +127,7 @@ public class ParkingLotSystem {
     }
 
     public ParkingLot getLot(List<ParkingLot> parkingLots) {
-        List<ParkingLot> parkingLotList = parkingLots;
+        List<ParkingLot> parkingLotList = new ArrayList<>(parkingLots);
         parkingLotList.sort(Comparator.comparing(parkingLot -> parkingLot.getNumberOfVehicles()));
         return parkingLotList.get(0);
     }
