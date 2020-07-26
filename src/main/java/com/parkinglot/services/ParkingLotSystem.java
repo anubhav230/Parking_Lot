@@ -1,4 +1,3 @@
-
 package com.parkinglot.services;
 
 import com.parkinglot.Observers.ParkingLotObserver;
@@ -7,14 +6,13 @@ import com.parkinglot.models.Slot;
 
 import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class ParkingLotSystem {
     private final int numberOfLots;
     private final int lotSize;
-
-    public List<ParkingLotObserver> observers;
-    public List<ParkingLot> parkingLots;
-
+    private final List<ParkingLotObserver> observers;
+    private final List<ParkingLot> parkingLots;
 
     public ParkingLotSystem(int lotSize, int numberOfLots) {
         parkingLots = new ArrayList<>();
@@ -38,26 +36,44 @@ public class ParkingLotSystem {
                     .ExceptionType.PARKING_FULL);
         }
         Slot slotValue = new Slot(vehicle, LocalTime.now().withNano(0));
-        ParkingLot parkingLot = getLot(this.parkingLots);
-        Integer slot1 = getSpot(parkingLot);
-        parkingLot.parkingLotMap.put(slot1, slotValue);
+        ParkingLot parkingLot;
+        if (driverType == DriverType.NORMAL) {
+            parkingLot = getLot(parkingLots);
+        } else  {
+            parkingLot = handicapDriver();
+        }
+        int slot1 = this.getSpot(parkingLot);
+        parkingLot.parkingSlotMap.put(slot1, slotValue);
+    }
+
+    public ParkingLot handicapDriver() {
+        for (ParkingLot parkingLot : parkingLots) {
+            for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet()) {
+                if (entry.getValue() == null) {
+                    return parkingLot;
+                }
+            }
+        }
+        return null;
     }
 
     public boolean isVehicleParked(String vehicle) {
-        for (ParkingLot parkingLot : parkingLots)
-            for (Map.Entry<Integer, Slot> entry : parkingLot.parkingLotMap.entrySet()) {
+        for (ParkingLot parkingLot : parkingLots) {
+            for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet()) {
                 if (entry.getValue() != null) {
-                    if (entry.getValue().getVehicle().equals(vehicle)) {
+                    if (entry.getValue()
+                            .getVehicle().equals(vehicle)) {
                         return true;
                     }
                 }
             }
+        }
         return false;
     }
 
     public Integer getSpot(ParkingLot parkingLot) {
-        for (int i = 1; i <= parkingLot.parkingLotMap.size(); i++) {
-            if (parkingLot.parkingLotMap.get(i) == null)
+        for (int i = 1; i <= parkingLot.parkingSlotMap.size(); i++) {
+            if (parkingLot.parkingSlotMap.get(i) == null)
                 return i;
         }
         return null;
@@ -65,52 +81,62 @@ public class ParkingLotSystem {
 
     public boolean isSizeFull() {
         int vehicleCount = parkingLots.stream().mapToInt(ParkingLot::getNumberOfVehicles).sum();
-        boolean availability = (lotSize * numberOfLots) == vehicleCount;
-        return availability;
+        return (lotSize * numberOfLots) == vehicleCount;
     }
 
     public boolean unPark(String vehicle) {
-        ParkingLot parkingLot = vehicleLot(vehicle);
-        if (parkingLot == null)
-            return false;
-        for (Map.Entry<Integer, Slot> entry : parkingLot.parkingLotMap.entrySet()) {
-            if (vehicle.equals(entry.getValue().getVehicle())) {
-                Integer key = entry.getKey();
-                parkingLot.parkingLotMap.put(key, null);
-                observers.forEach(ParkingLotObserver::capacityIsAvailable);
-                return true;
+        for (ParkingLot parkingLot : parkingLots)
+            for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet()) {
+                if (entry.getValue() != null) {
+                    if (entry.getValue().getVehicle().equals(vehicle)) {
+                        Integer key = entry.getKey();
+                        System.out.println(key);
+                        parkingLot.parkingSlotMap.put(key, null);
+                        observers.forEach(ParkingLotObserver::capacityIsAvailable);
+                        return true;
+                    }
+                }
             }
-        }
         return false;
     }
 
-    public ParkingLot vehicleLot(String vehicle) {
+    public void initialiseParkingLot(int lotSize) {
+        IntStream.range(0, lotSize).forEach(i -> parkingLots
+                .add(i, new ParkingLot(lotSize)));
+    }
+
+    public ParkingLot getLot(List<ParkingLot> parkingLots) {
+        List<ParkingLot> parkingLotList = parkingLots;
+        parkingLotList.sort(Comparator.comparing(parkingLot -> parkingLot.getNumberOfVehicles()));
+        return parkingLotList.get(0);
+    }
+
+    public LocalTime getParkTime(String vehicle) {
         for (ParkingLot parkingLot : parkingLots)
-            for (Map.Entry<Integer, Slot> entry : parkingLot.parkingLotMap.entrySet()) {
-                if (entry.getValue().getVehicle().equals(vehicle)) {
-                    return parkingLot;
+            for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet()) {
+                if (entry.getValue() != null) {
+                    if (entry.getValue().getVehicle().equals(vehicle)) {
+                        Integer key = entry.getKey();
+                        return parkingLot.parkingSlotMap.get(key).getTime();
+                    }
                 }
             }
         return null;
     }
 
-    public void initialiseParkingLot(int lotSize) {
-        for (int i = 0; i < lotSize; i++) {
-            parkingLots.add(i, new ParkingLot(lotSize));
+    public String vehicleLocation(String vehicle) {
+        int lot = 0;
+        for (ParkingLot parkingLot : parkingLots) {
+            lot++;
+            for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet()) {
+                if (entry.getValue() != null) {
+                    if (entry.getValue().getVehicle().equals(vehicle)) {
+                        Integer key = entry.getKey();
+                        return +lot + "," + "" + key;
+                    }
+                }
+            }
         }
-    }
-
-    public ParkingLot getLot(List<ParkingLot> parkingLots) {
-        List<ParkingLot> parkingLotList = parkingLots;
-        parkingLots.sort(Comparator.comparing(ParkingLot::getNumberOfVehicles));
-        return parkingLotList.get(0);
-    }
-
-    public LocalTime getParkTime(int vehicle) {
-        for (ParkingLot parkingLot : parkingLots)
-            return parkingLot.parkingLotMap.get(vehicle).getTime();
         return null;
     }
-
-
 }
