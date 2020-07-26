@@ -40,13 +40,13 @@ public class ParkingLotSystem {
         if (driverType == DriverType.NORMAL) {
             parkingLot = getLot(parkingLots);
         } else  {
-            parkingLot = handicapDriver();
+            parkingLot = handicapDriverPark();
         }
         int slot1 = this.getSpot(parkingLot);
         parkingLot.parkingSlotMap.put(slot1, slotValue);
     }
 
-    public ParkingLot handicapDriver() {
+    public ParkingLot handicapDriverPark() {
         for (ParkingLot parkingLot : parkingLots) {
             for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet()) {
                 if (entry.getValue() == null) {
