@@ -1,8 +1,5 @@
 package com.parkinglot.Observers;
 
-import com.parkinglot.services.DriverType;
-import com.parkinglot.services.ParkingLotSystem;
-
 public class ParkingLotOwner  implements ParkingLotObserver {
 
     private boolean isFullCapacity;

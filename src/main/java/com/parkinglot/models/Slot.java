@@ -4,20 +4,20 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 public class Slot {
-    public String vehicle;
+    public VehicleDetails vehicleDetails;
     public LocalTime time;
 
-    public Slot(String vehicle, LocalTime time) {
+    public Slot(VehicleDetails vehicleDetails, LocalTime time) {
         this.time = time;
-        this.vehicle = vehicle;
+        this.vehicleDetails = vehicleDetails;
     }
 
     public LocalTime getTime() {
         return time;
     }
 
-    public String getVehicle() {
-        return vehicle;
+    public VehicleDetails getVehicleDetails() {
+        return vehicleDetails;
     }
 
     @Override
@@ -25,15 +25,8 @@ public class Slot {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Slot slot = (Slot) o;
-        return Objects.equals(vehicle, slot.vehicle) &&
+        return Objects.equals(vehicleDetails, slot.vehicleDetails) &&
                 Objects.equals(time, slot.time);
     }
 
-    @Override
-    public String toString() {
-        return "Slot{" +
-                "vehicle='" + vehicle + '\'' +
-                ", time=" + time +
-                '}';
-    }
 }
