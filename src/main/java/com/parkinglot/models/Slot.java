@@ -6,10 +6,16 @@ import java.util.Objects;
 public class Slot {
     public VehicleDetails vehicleDetails;
     public LocalTime time;
+    private String attendantNme;
 
-    public Slot(VehicleDetails vehicleDetails, LocalTime time) {
+    public Slot(VehicleDetails vehicleDetails, LocalTime time, String attendantNme) {
         this.time = time;
         this.vehicleDetails = vehicleDetails;
+        this.attendantNme = attendantNme;
+    }
+
+    public String getAttendantName() {
+        return attendantNme;
     }
 
     public LocalTime getTime() {
@@ -19,14 +25,4 @@ public class Slot {
     public VehicleDetails getVehicleDetails() {
         return vehicleDetails;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Slot slot = (Slot) o;
-        return Objects.equals(vehicleDetails, slot.vehicleDetails) &&
-                Objects.equals(time, slot.time);
-    }
-
 }

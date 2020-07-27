@@ -1,6 +1,7 @@
 package com.parkinglot.services;
 
 import com.parkinglot.Observers.ParkingLotObserver;
+import com.parkinglot.enums.CarCompany;
 import com.parkinglot.enums.DriverType;
 import com.parkinglot.enums.Vehicle;
 import com.parkinglot.enums.VehicleColor;
@@ -31,7 +32,7 @@ public class ParkingLotSystem {
         this.observers.add(observer);
     }
 
-    public void park(VehicleDetails vehicleDetails) throws ParkingLotException {
+    public void park(VehicleDetails vehicleDetails, String attendantName) throws ParkingLotException {
         if (isVehicleParked(vehicleDetails.getVehicle()))
             throw new ParkingLotException("Vehicle is already parked", ParkingLotException
                     .ExceptionType.ALREADY_PARKED);
@@ -40,7 +41,7 @@ public class ParkingLotSystem {
             throw new ParkingLotException("Parking Lot is full", ParkingLotException
                     .ExceptionType.PARKING_FULL);
         }
-        Slot slotValue = new Slot(vehicleDetails, LocalTime.now().withNano(0));
+        Slot slotValue = new Slot(vehicleDetails, LocalTime.now().withNano(0), attendantName);
         ParkingLot parkingLot;
         Integer slot;
         if (vehicleDetails.getVehicleSize() == Vehicle.SMALL) {
@@ -49,11 +50,10 @@ public class ParkingLotSystem {
             } else {
                 parkingLot = handicapDriver();
             }
-            slot = this.getSpot(parkingLot);
         } else {
             parkingLot = largeVehiclePark(parkingLots);
-            slot = this.getSpot(parkingLot);
         }
+        slot = this.getSpot(parkingLot);
         parkingLot.parkingSlotMap.put(slot, slotValue);
     }
 
@@ -71,7 +71,7 @@ public class ParkingLotSystem {
     }
 
     public ParkingLot largeVehiclePark(List<ParkingLot> parkingLots) throws ParkingLotException {
-        for (ParkingLot parkingLot : parkingLots) {
+        for (ParkingLot parkingLot : parkingLots)
             for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet()) {
                 key = entry.getKey();
                 if (key < lotSize)
@@ -80,7 +80,6 @@ public class ParkingLotSystem {
                         return parkingLot;
                     }
             }
-        }
         throw new ParkingLotException("there is no place for large vehicle", ParkingLotException
                 .ExceptionType.NO_PLACE_FOR_LARGE_VEHICLE);
     }
@@ -184,4 +183,24 @@ public class ParkingLotSystem {
         }
         return whiteVehicleDetails;
     }
+
+    public List<String> findToyotaPosition(VehicleColor color, CarCompany carCompany) {
+        List<String> vehicleDetails = new ArrayList<>();
+        int lot = 0;
+        for (ParkingLot parkingLot : parkingLots) {
+            lot++;
+            for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet())
+                if (entry.getValue() != null && entry.getValue()
+                        .getVehicleDetails().getColor().equals(color) &&
+                        entry.getValue().getVehicleDetails().getCarCompany().equals(carCompany)) {
+                        Integer key = entry.getKey();
+                        String details = "L: " + lot + ", S: " + key + ", Number: " + entry.getValue()
+                                .getVehicleDetails().getVehicle() + ", Attendant Name: " +
+                                entry.getValue().getAttendantName();
+                        vehicleDetails.add(details);
+                }
+        }
+        return vehicleDetails;
+    }
+
 }
