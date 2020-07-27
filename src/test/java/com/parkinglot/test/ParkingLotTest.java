@@ -378,4 +378,23 @@ public class ParkingLotTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void givenParingLot_WhenHaveParkedCars_ShouldReturnAllCars() {
+        ParkingLotSystem parkingService = new ParkingLotSystem(2, 2);
+        try {
+            parkingService.park(new VehicleDetails(Vehicle.SMALL, VehicleColor.WHITE,
+                    CarCompany.MAHINDRA, "UP 75 DE 1234"), "AAAAAA");
+            parkingService.park(new VehicleDetails(Vehicle.SMALL, VehicleColor.BLUE,
+                    CarCompany.BMW, "UP 75 DE 1235"), "BBBBBB");
+            parkingService.park(new VehicleDetails(Vehicle.SMALL, VehicleColor.BLUE,
+                    CarCompany.BMW, "UP 75 DE 1236"), "BBBBBB");
+            parkingService.park(new VehicleDetails(Vehicle.SMALL, VehicleColor.BLUE,
+                    CarCompany.TOYOTA, "UP 75 DE 1237"), "BBBBBB");
+            int carCount = parkingService.carCount();
+            Assert.assertEquals(4, carCount);
+        } catch (ParkingLotException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

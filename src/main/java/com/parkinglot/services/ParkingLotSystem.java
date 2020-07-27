@@ -32,6 +32,7 @@ public class ParkingLotSystem {
         initialiseParkingLot(numberOfLots);
     }
 
+
     public void register(ParkingLotObserver observer) {
         this.observers.add(observer);
     }
@@ -231,14 +232,25 @@ public class ParkingLotSystem {
             lot++;
             for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet())
                 if (entry.getValue() != null && lot == lot2 &&
-                                entry.getValue().getVehicleDetails().getDriverType().equals(driverType)) {
-                                Integer slot = entry.getKey();
-                                String details = "L: " + lot + ", S: " + slot + ", "+
-                                entry.getValue().getVehicleDetails().getVehicle();
+                        entry.getValue().getVehicleDetails().getDriverType().equals(driverType)) {
+                    Integer slot = entry.getKey();
+                    String details = "L: " + lot + ", S: " + slot + ", " +
+                            entry.getValue().getVehicleDetails().getVehicle();
                     vehicleDetails.add(details);
                 }
             return vehicleDetails;
         }
         return null;
+    }
+
+    public int carCount() {
+        int carCount = 0;
+        for (ParkingLot parkingLot : parkingLots) {
+            for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet())
+                if (entry.getValue() != null)
+                    carCount++;
+
+        }
+        return carCount;
     }
 }
