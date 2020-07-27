@@ -351,20 +351,14 @@ public class ParkingLotTest {
         }
     }
 
-
-
     @Test
     public void givenVehicle_WhenParked_ShouldCheckParkDuration() {
         ParkingLotSystem parkingService = new ParkingLotSystem(3, 3);
-
         try {
             parkingService.park(new VehicleDetails(Vehicle.SMALL, VehicleColor.WHITE,
                     CarCompany.MAHINDRA, "UP 75 DE 1234"), "AAAAAA");
-            parkingService.park(new VehicleDetails(Vehicle.SMALL, VehicleColor.BLUE,
-                    CarCompany.BMW, "UP 75 DE 1235"), "BBBBBB");
-            double timeDuration = parkingService.timeDuration(parkingService.getParkTime("AAAAAA"),
-                                                LocalTime.now().withNano(0));
-
+            List<String> carDetails = parkingService.ParkTimeDuration(30);
+            Assert.assertEquals(Arrays.asList("L: 1, S: 1"), carDetails);
         } catch (ParkingLotException e) {
             System.out.println(e.getMessage());
         }

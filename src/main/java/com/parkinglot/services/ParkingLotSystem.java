@@ -10,11 +10,13 @@ import com.parkinglot.exception.ParkingLotException;
 import com.parkinglot.models.Slot;
 import com.parkinglot.models.VehicleDetails;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.IntStream;
-
 
 
 public class ParkingLotSystem {
@@ -171,7 +173,7 @@ public class ParkingLotSystem {
                 if (entry.getValue() != null) {
                     if (entry.getValue().getVehicleDetails().getColor().equals(color)) {
                         Integer key = entry.getKey();
-                        String location = "L"+ lot +", S"+ key;
+                        String location = "L" + lot + ", S" + key;
                         whiteVehicleDetails.add(location);
                     }
                 }
@@ -189,38 +191,37 @@ public class ParkingLotSystem {
                 if (entry.getValue() != null && entry.getValue()
                         .getVehicleDetails().getColor().equals(color) &&
                         entry.getValue().getVehicleDetails().getCarCompany().equals(carCompany)) {
-                        Integer key = entry.getKey();
-                        String details = "L: " + lot + ", S: " + key + ", Number: " + entry.getValue()
-                                .getVehicleDetails().getVehicle() + ", Attendant Name: " +
-                                entry.getValue().getAttendantName();
-                        vehicleDetails.add(details);
+                    Integer key = entry.getKey();
+                    String details = "L: " + lot + ", S: " + key + ", Number: " + entry.getValue()
+                            .getVehicleDetails().getVehicle() + ", Attendant Name: " +
+                            entry.getValue().getAttendantName();
+                    vehicleDetails.add(details);
                 }
         }
         return vehicleDetails;
     }
 
     public int parkedVehicleCount(CarCompany company) {
-        int count = parkingLots.stream().mapToInt(parkingLot -> (int) parkingLot.parkingSlotMap
+        return parkingLots.stream().mapToInt(parkingLot -> (int) parkingLot.parkingSlotMap
                 .entrySet().stream().filter(entry -> entry.getValue() != null &&
                         entry.getValue().getVehicleDetails().getCarCompany().equals(company))
-                        .count()).sum();
-        return count;
+                .count()).sum();
     }
 
-    public LocalTime ParkTimeDuration(LocalTime time) {
-        for (ParkingLot parkingLot : parkingLots)
-            for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet()) {
-                if (entry.getValue() != null && entry.getValue().getTime().equals(time)) {
-                    time = entry.getValue().getTime();
-                    return time;
+    public List<String> ParkTimeDuration(int timeInMinutes) {
+        List<String> vehicleDetails = new ArrayList<>();
+        int lot = 0;
+        for (ParkingLot parkingLot : parkingLots) {
+            lot++;
+            for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet())
+                if (entry.getValue() != null && Duration.between(entry.getValue().getTime(),
+                        LocalDateTime.now()).toMinutes() <= timeInMinutes) {
+                    Integer key = entry.getKey();
+                    String details = "L: " + lot + ", S: " + key;
+                    vehicleDetails.add(details);
                 }
-                Integer key = entry.getKey();
-            }
+            return vehicleDetails;
+        }
         return null;
-    }
-
-    public long timeDuration(LocalTime parkTime, LocalTime currentTime) {
-        long time = ChronoUnit.MINUTES.between(parkTime,currentTime);
-        return time;
     }
 }
