@@ -2,16 +2,13 @@ package com.parkinglot.test;
 
 import com.parkinglot.Observers.ParkingLotOwner;
 import com.parkinglot.Observers.SecurityStaff;
-//import com.parkinglot.enums.CarCompany;
-//import com.parkinglot.enums.VehicleColor;
-//import com.parkinglot.enums.Vehicle;
-//import com.parkinglot.enums.DriverType;
 import com.parkinglot.enums.AllEnums.CarCompany;
 import com.parkinglot.enums.AllEnums.VehicleColor;
 import com.parkinglot.enums.AllEnums.Vehicle;
 import com.parkinglot.enums.AllEnums.DriverType;
 import com.parkinglot.exception.ParkingLotException;
 
+import com.parkinglot.models.Slot;
 import com.parkinglot.models.VehicleDetails;
 import com.parkinglot.services.ParkingLotSystem;
 
@@ -324,7 +321,8 @@ public class ParkingLotTest {
                     CarCompany.TATA, "UP 75 DE 1234"), "AAAAAA");
             parkingService.park(new VehicleDetails(Vehicle.SMALL, VehicleColor.BLUE,
                     CarCompany.TOYOTA, "UP 75 DE 1235"), "BBBBBB");
-            List carDetails = parkingService.findToyotaPosition(VehicleColor.BLUE, CarCompany.TOYOTA);
+            List carDetails = parkingService.findPositionColorAndCompanyOfCar(VehicleColor
+                                        .BLUE, CarCompany.TOYOTA);
             Assert.assertEquals(Arrays.asList("L: 1, S: 2, Number: UP 75 DE 1235, Attendant Name: BBBBBB")
                     , carDetails);
         } catch (ParkingLotException e) {
@@ -333,7 +331,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void givenBMWVehicle_WhenParked_ShouldReturnNumberOfCars() {
+    public void givenBMWCars_WhenParked_ShouldReturnNumberOfCars() {
         ParkingLotSystem parkingService = new ParkingLotSystem(3, 3);
         try {
             parkingService.park(new VehicleDetails(Vehicle.SMALL, VehicleColor.WHITE,
@@ -348,6 +346,25 @@ public class ParkingLotTest {
                     CarCompany.TATA, "UP 75 DE 1238"), "BBBBBB");
             int carCount = parkingService.parkedVehicleCount(CarCompany.BMW);
             Assert.assertEquals(2, carCount);
+        } catch (ParkingLotException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+
+    @Test
+    public void givenVehicle_WhenParked_ShouldCheckParkDuration() {
+        ParkingLotSystem parkingService = new ParkingLotSystem(3, 3);
+
+        try {
+            parkingService.park(new VehicleDetails(Vehicle.SMALL, VehicleColor.WHITE,
+                    CarCompany.MAHINDRA, "UP 75 DE 1234"), "AAAAAA");
+            parkingService.park(new VehicleDetails(Vehicle.SMALL, VehicleColor.BLUE,
+                    CarCompany.BMW, "UP 75 DE 1235"), "BBBBBB");
+            double timeDuration = parkingService.timeDuration(parkingService.getParkTime("AAAAAA"),
+                                                LocalTime.now().withNano(0));
+
         } catch (ParkingLotException e) {
             System.out.println(e.getMessage());
         }

@@ -1,21 +1,23 @@
 package com.parkinglot.models;
 
 import java.time.LocalTime;
-import com.parkinglot.enums.AllEnums;
 
 public class Slot {
     public VehicleDetails vehicleDetails;
     public LocalTime time;
-    private String attendantNme;
+    private String attendantName;
 
-    public Slot(VehicleDetails vehicleDetails, LocalTime time, String attendantNme) {
+    public Slot(VehicleDetails vehicleDetails, LocalTime time, String attendantName) {
         this.time = time;
         this.vehicleDetails = vehicleDetails;
-        this.attendantNme = attendantNme;
+        this.attendantName = attendantName;
+    }
+
+    public Slot() {
     }
 
     public String getAttendantName() {
-        return attendantNme;
+        return attendantName;
     }
 
     public LocalTime getTime() {

@@ -1,9 +1,5 @@
 package com.parkinglot.models;
 
-//import com.parkinglot.enums.CarCompany;
-//import com.parkinglot.enums.DriverType;
-//import com.parkinglot.enums.Vehicle;
-//import com.parkinglot.enums.VehicleColor;
 import com.parkinglot.enums.AllEnums.CarCompany;
 import com.parkinglot.enums.AllEnums.DriverType;
 import com.parkinglot.enums.AllEnums.VehicleColor;
@@ -18,7 +14,7 @@ public class VehicleDetails {
     private VehicleColor vehicleColor;
 
     public VehicleDetails(Vehicle vehicleType, VehicleColor vehicleColor,
-                          CarCompany carCompany, String vehicle ) {
+                          CarCompany carCompany, String vehicle) {
         this.vehicle = vehicle;
         this.vehicleType = vehicleType;
         this.vehicleColor = vehicleColor;
@@ -27,7 +23,6 @@ public class VehicleDetails {
 
     public VehicleDetails(Vehicle vehicleType, DriverType driverType,
                           VehicleColor vehicleColor, String vehicle) {
-
         this.vehicle = vehicle;
         this.vehicleType = vehicleType;
         this.driverType = driverType;
