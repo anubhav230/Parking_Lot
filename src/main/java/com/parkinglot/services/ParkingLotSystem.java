@@ -1,20 +1,18 @@
 package com.parkinglot.services;
 
 import com.parkinglot.Observers.ParkingLotObserver;
-import com.parkinglot.enums.AllEnums.CarCompany;
-import com.parkinglot.enums.AllEnums.DriverType;
-import com.parkinglot.enums.AllEnums.Vehicle;
-import com.parkinglot.enums.AllEnums.VehicleColor;
+import com.parkinglot.enums.CarCompany;
+import com.parkinglot.enums.DriverType;
+import com.parkinglot.enums.Vehicle;
+import com.parkinglot.enums.VehicleColor;
 
 import com.parkinglot.exception.ParkingLotException;
 import com.parkinglot.models.Slot;
 import com.parkinglot.models.VehicleDetails;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -133,7 +131,7 @@ public class ParkingLotSystem {
 
     public ParkingLot getLot(List<ParkingLot> parkingLots) {
         List<ParkingLot> parkingLotList = new ArrayList<>(parkingLots);
-        parkingLotList.sort(Comparator.comparing(parkingLot -> parkingLot.getNumberOfVehicles()));
+        parkingLotList.sort(Comparator.comparing(ParkingLot::getNumberOfVehicles));
         return parkingLotList.get(0);
     }
 
@@ -155,7 +153,8 @@ public class ParkingLotSystem {
         for (ParkingLot parkingLot : parkingLots) {
             lot++;
             for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet()) {
-                if (entry.getValue() != null && entry.getValue().getVehicleDetails().getVehicle().equals(vehicle)) {
+                if (entry.getValue() != null && entry.getValue().getVehicleDetails()
+                        .getVehicle().equals(vehicle)) {
                     Integer key = entry.getKey();
                     return +lot + "," + "" + key;
                 }
@@ -218,6 +217,24 @@ public class ParkingLotSystem {
                         LocalDateTime.now()).toMinutes() <= timeInMinutes) {
                     Integer key = entry.getKey();
                     String details = "L: " + lot + ", S: " + key;
+                    vehicleDetails.add(details);
+                }
+            return vehicleDetails;
+        }
+        return null;
+    }
+
+    public List<String> locationAndInformationOfDriverType(DriverType driverType, int lot2) {
+        List<String> vehicleDetails = new ArrayList<>();
+        int lot = 0;
+        for (ParkingLot parkingLot : parkingLots) {
+            lot++;
+            for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet())
+                if (entry.getValue() != null && lot == lot2 &&
+                                entry.getValue().getVehicleDetails().getDriverType().equals(driverType)) {
+                                Integer slot = entry.getKey();
+                                String details = "L: " + lot + ", S: " + slot + ", "+
+                                entry.getValue().getVehicleDetails().getVehicle();
                     vehicleDetails.add(details);
                 }
             return vehicleDetails;

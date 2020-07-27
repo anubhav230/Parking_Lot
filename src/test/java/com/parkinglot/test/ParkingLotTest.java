@@ -2,13 +2,12 @@ package com.parkinglot.test;
 
 import com.parkinglot.Observers.ParkingLotOwner;
 import com.parkinglot.Observers.SecurityStaff;
-import com.parkinglot.enums.AllEnums.CarCompany;
-import com.parkinglot.enums.AllEnums.VehicleColor;
-import com.parkinglot.enums.AllEnums.Vehicle;
-import com.parkinglot.enums.AllEnums.DriverType;
+import com.parkinglot.enums.CarCompany;
+import com.parkinglot.enums.VehicleColor;
+import com.parkinglot.enums.Vehicle;
+import com.parkinglot.enums.DriverType;
 import com.parkinglot.exception.ParkingLotException;
 
-import com.parkinglot.models.Slot;
 import com.parkinglot.models.VehicleDetails;
 import com.parkinglot.services.ParkingLotSystem;
 
@@ -361,6 +360,22 @@ public class ParkingLotTest {
             Assert.assertEquals(Arrays.asList("L: 1, S: 1"), carDetails);
         } catch (ParkingLotException e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    @Test
+    public void givenParkingLot_WhenHaveHandicapDriverType_ShouldReturnLocation() {
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem(2,2);
+        try {
+            parkingLotSystem.park(new VehicleDetails(Vehicle.SMALL,
+                    DriverType.NORMAL, "UP 75 DE 1234"), "AAAAAA");
+            parkingLotSystem.park(new VehicleDetails(Vehicle.SMALL,
+                    DriverType.HANDICAP, "UP 75 DE 1235"), "AAAAAA");
+            List<String> information = parkingLotSystem.locationAndInformationOfDriverType
+                                        (DriverType.HANDICAP, 1);
+            Assert.assertEquals(Arrays.asList("L: 1, S: 2, UP 75 DE 1235, 00:33:09"), information);
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
         }
     }
 }
