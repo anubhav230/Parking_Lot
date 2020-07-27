@@ -1,9 +1,9 @@
 package com.parkinglot.models;
 
-import com.parkinglot.enums.AllEnums.CarCompany;
-import com.parkinglot.enums.AllEnums.DriverType;
-import com.parkinglot.enums.AllEnums.VehicleColor;
-import com.parkinglot.enums.AllEnums.Vehicle;
+import com.parkinglot.enums.CarCompany;
+import com.parkinglot.enums.DriverType;
+import com.parkinglot.enums.VehicleColor;
+import com.parkinglot.enums.Vehicle;
 
 public class VehicleDetails {
 
