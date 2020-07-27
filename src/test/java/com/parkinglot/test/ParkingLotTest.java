@@ -315,12 +315,33 @@ public class ParkingLotTest {
         ParkingLotSystem parkingService = new ParkingLotSystem(3, 3);
         try {
             parkingService.park(new VehicleDetails(Vehicle.SMALL, VehicleColor.WHITE,
-                    CarCompany.TOYOTA, "UP 75 DE 1234"), "AAAAAA");
+                    CarCompany.TATA, "UP 75 DE 1234"), "AAAAAA");
             parkingService.park(new VehicleDetails(Vehicle.SMALL, VehicleColor.BLUE,
                     CarCompany.TOYOTA, "UP 75 DE 1235"), "BBBBBB");
             List carDetails = parkingService.findToyotaPosition(VehicleColor.BLUE, CarCompany.TOYOTA);
             Assert.assertEquals(Arrays.asList("L: 1, S: 2, Number: UP 75 DE 1235, Attendant Name: BBBBBB")
                     , carDetails);
+        } catch (ParkingLotException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Test
+    public void givenBMWVehicle_WhenParked_ShouldReturnNumberOfCars() {
+        ParkingLotSystem parkingService = new ParkingLotSystem(3, 3);
+        try {
+            parkingService.park(new VehicleDetails(Vehicle.SMALL, VehicleColor.WHITE,
+                    CarCompany.MAHINDRA, "UP 75 DE 1234"), "AAAAAA");
+            parkingService.park(new VehicleDetails(Vehicle.SMALL, VehicleColor.BLUE,
+                    CarCompany.BMW, "UP 75 DE 1235"), "BBBBBB");
+            parkingService.park(new VehicleDetails(Vehicle.SMALL, VehicleColor.BLUE,
+                    CarCompany.BMW, "UP 75 DE 1236"), "BBBBBB");
+            parkingService.park(new VehicleDetails(Vehicle.SMALL, VehicleColor.BLUE,
+                    CarCompany.TOYOTA, "UP 75 DE 1237"), "BBBBBB");
+            parkingService.park(new VehicleDetails(Vehicle.SMALL, VehicleColor.BLUE,
+                    CarCompany.TATA, "UP 75 DE 1238"), "BBBBBB");
+            int carCount = parkingService.parkedVehicleCount(CarCompany.BMW);
+            Assert.assertEquals(2, carCount);
         } catch (ParkingLotException e) {
             System.out.println(e.getMessage());
         }

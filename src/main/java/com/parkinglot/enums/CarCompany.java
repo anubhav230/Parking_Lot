@@ -1,5 +1,5 @@
 package com.parkinglot.enums;
 
 public enum CarCompany {
-    TATA, TOYOTA, MAHINDRA
+    TATA, TOYOTA, MAHINDRA, BMW
 }

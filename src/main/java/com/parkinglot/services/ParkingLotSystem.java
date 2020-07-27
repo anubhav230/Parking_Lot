@@ -207,4 +207,18 @@ public class ParkingLotSystem {
         return vehicleDetails;
     }
 
+    public int parkedVehicleCount(CarCompany company) {
+        //List<String> vehicleDetails = new ArrayList<>();
+        int count = 0;
+        for (ParkingLot parkingLot : parkingLots) {
+            for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet())
+                if (entry.getValue() != null) {
+                    if (entry.getValue().getVehicleDetails().getCarCompany().equals(company)) {
+                        count++;
+                    }
+                }
+        }
+        return count;
+    }
+
 }
