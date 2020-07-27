@@ -2,13 +2,19 @@ package com.parkinglot.test;
 
 import com.parkinglot.Observers.ParkingLotOwner;
 import com.parkinglot.Observers.SecurityStaff;
-import com.parkinglot.enums.CarCompany;
-import com.parkinglot.enums.VehicleColor;
+//import com.parkinglot.enums.CarCompany;
+//import com.parkinglot.enums.VehicleColor;
+//import com.parkinglot.enums.Vehicle;
+//import com.parkinglot.enums.DriverType;
+import com.parkinglot.enums.AllEnums.CarCompany;
+import com.parkinglot.enums.AllEnums.VehicleColor;
+import com.parkinglot.enums.AllEnums.Vehicle;
+import com.parkinglot.enums.AllEnums.DriverType;
 import com.parkinglot.exception.ParkingLotException;
-import com.parkinglot.enums.DriverType;
+
 import com.parkinglot.models.VehicleDetails;
 import com.parkinglot.services.ParkingLotSystem;
-import com.parkinglot.enums.Vehicle;
+
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,6 +1,7 @@
 package com.parkinglot.models;
 
 import java.time.LocalTime;
+import com.parkinglot.enums.AllEnums;
 
 public class Slot {
     public VehicleDetails vehicleDetails;
