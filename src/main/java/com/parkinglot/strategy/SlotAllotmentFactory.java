@@ -8,6 +8,8 @@ public class SlotAllotmentFactory {
     public ISlotAllotmentStrategy lotAllotment(VehicleDetails vehicleDetails) {
         return vehicleDetails.getVehicleSize() == Vehicle.SMALL ?
                 vehicleDetails.getDriverType() == DriverType.NORMAL ?
-                         new NormalVehicleSlotAllotment() : new HandicapDriverSlotAllotment() : new LargeVehicleSlotAllotment();
+                        new NormalVehicleSlotAllotment() :
+                        new HandicapDriverSlotAllotment() :
+                new LargeVehicleSlotAllotment();
     }
 }

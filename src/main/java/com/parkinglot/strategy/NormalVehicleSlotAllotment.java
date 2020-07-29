@@ -1,6 +1,4 @@
 package com.parkinglot.strategy;
-
-import com.parkinglot.enums.DriverType;
 import com.parkinglot.services.ParkingLot;
 
 import java.util.ArrayList;
