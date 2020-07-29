@@ -16,7 +16,6 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.IntStream;
 
-
 public class ParkingLotSystem {
     private final int numberOfLots;
     private final int lotSize;
@@ -49,15 +48,9 @@ public class ParkingLotSystem {
         Slot slotValue = new Slot(vehicleDetails, LocalTime.now().withNano(0), attendantName);
         ParkingLot parkingLot;
         Integer slot;
-        if (vehicleDetails.getVehicleSize() == Vehicle.SMALL) {
-            if (vehicleDetails.getDriverType() == DriverType.NORMAL) {
-                parkingLot = getLot(parkingLots);
-            } else {
-                parkingLot = handicapDriver();
-            }
-        } else {
-            parkingLot = largeVehiclePark(parkingLots);
-        }
+        parkingLot = vehicleDetails.getVehicleSize() == Vehicle.SMALL ?
+                vehicleDetails.getDriverType() == DriverType.NORMAL ?
+                        getLot(parkingLots) : handicapDriver() : largeVehiclePark(parkingLots);
 
         slot = this.getSpot(parkingLot);
         parkingLot.parkingSlotMap.put(slot, slotValue);
@@ -99,8 +92,7 @@ public class ParkingLotSystem {
 
     public Integer getSpot(ParkingLot parkingLot) {
         for (int i = 1; i <= parkingLot.parkingSlotMap.size(); i++) {
-            if (parkingLot.parkingSlotMap.get(i) == null)
-                return i;
+            if (parkingLot.parkingSlotMap.get(i) == null) return i;
         }
         return null;
     }
@@ -139,11 +131,9 @@ public class ParkingLotSystem {
     public LocalTime getParkTime(String vehicle) {
         for (ParkingLot parkingLot : parkingLots)
             for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet()) {
-                if (entry.getValue() != null) {
-                    if (entry.getValue().getVehicleDetails().getVehicle().equals(vehicle)) {
-                        Integer key = entry.getKey();
-                        return parkingLot.parkingSlotMap.get(key).getTime();
-                    }
+                if (entry.getValue() != null && entry.getValue().getVehicleDetails().getVehicle().equals(vehicle)) {
+                    Integer key = entry.getKey();
+                    return parkingLot.parkingSlotMap.get(key).getTime();
                 }
             }
         return null;
@@ -170,12 +160,10 @@ public class ParkingLotSystem {
         for (ParkingLot parkingLot : parkingLots) {
             lot++;
             for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet()) {
-                if (entry.getValue() != null) {
-                    if (entry.getValue().getVehicleDetails().getColor().equals(color)) {
-                        Integer key = entry.getKey();
-                        String location = "L" + lot + ", S" + key;
-                        whiteVehicleDetails.add(location);
-                    }
+                if (entry.getValue() != null && entry.getValue().getVehicleDetails().getColor().equals(color)) {
+                    Integer key = entry.getKey();
+                    String location = "L" + lot + ", S" + key;
+                    whiteVehicleDetails.add(location);
                 }
             }
         }
@@ -203,9 +191,9 @@ public class ParkingLotSystem {
 
     public int parkedVehicleCount(CarCompany company) {
         return parkingLots.stream().mapToInt(parkingLot -> (int) parkingLot.parkingSlotMap
-                .entrySet().stream().filter(entry -> entry.getValue() != null &&
+                        .entrySet().stream().filter(entry -> entry.getValue() != null &&
                         entry.getValue().getVehicleDetails().getCarCompany().equals(company))
-                .count()).sum();
+                        .count()).sum();
     }
 
     public List<String> ParkTimeDuration(int timeInMinutes) {
@@ -244,13 +232,8 @@ public class ParkingLotSystem {
     }
 
     public int carCount() {
-        int carCount = 0;
-        for (ParkingLot parkingLot : parkingLots) {
-            for (Map.Entry<Integer, Slot> entry : parkingLot.parkingSlotMap.entrySet())
-                if (entry.getValue() != null)
-                    carCount++;
-
-        }
-        return carCount;
+        return parkingLots.stream().mapToInt(parkingLot -> (int) parkingLot
+                .parkingSlotMap.entrySet().stream()
+                .filter(entry -> entry.getValue() != null).count()).sum();
     }
 }

@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ParkingLotTest {
 
-    ParkingLotSystem parkingLots = new ParkingLotSystem(3, 1);
+    ParkingLotSystem parkingLots = new ParkingLotSystem(2, 1);
 
     @Test
     public void givenCarAndUser_WhenPark_ShouldPark() {
@@ -84,7 +84,6 @@ public class ParkingLotTest {
             parkingLots.park(new VehicleDetails(Vehicle.SMALL,
                     DriverType.NORMAL, "vehicle4"), "AAAAAA");
         } catch (ParkingLotException e) {
-            System.out.println(e.getMessage());
             Assert.assertEquals("Parking Lot is full", e.getLocalizedMessage());
         }
     }
@@ -373,7 +372,7 @@ public class ParkingLotTest {
                     DriverType.HANDICAP, "UP 75 DE 1235"), "AAAAAA");
             List<String> information = parkingLotSystem.locationAndInformationOfDriverType
                                         (DriverType.HANDICAP, 1);
-            Assert.assertEquals(Arrays.asList("L: 1, S: 2, UP 75 DE 1235, 00:33:09"), information);
+            Assert.assertEquals(Arrays.asList("L: 1, S: 2, UP 75 DE 1235"), information);
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }
